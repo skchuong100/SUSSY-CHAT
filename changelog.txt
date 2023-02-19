@@ -1,2 +1,56 @@
-1.0 (02/18/23)
-- created files (reset.css)
+Version 1.0.00 FEBUARY 18, 2023
+Summary: The official beginning of the project that includes the initial template of the 'SUSSY CHAT' web
+application. This application is essentially a chat application where many clients(users) can connect to a 
+server where they can end up chatting together on whatever they would like. This application will also be 
+used with encryption/decryption functionality to keep the chat log anonymous. This version established the 
+basic framework of the application by having the basic functionality of having users to connect to the server,
+talk to each other using the send message button, and to leave the room that will they display a message.
+The first files we created for this version included code.js, index.html, reset.css, style.css, and 
+server.js.
+    
+    1.) Added code.js file
+        i.) implementation of event listener when the join button is clicked in the joining screen.
+            a.) ability to grab username and display it to textbox input. 
+            b.) Sends message to all clients in chat server to alert new user joined.
+            c.) Ability to change screen from joining screen to the chat box screen. 
+        ii.) implementation of the send button that is in the chat screen. 
+            a.) ability to read empty message, if so, it will terminate the function.
+            b.) ability to send message to the other clients, where they will also be able to read 
+                what the client sent.
+            c.) Reset of the chat textbox to be empty after a message is sent.
+        iii.) implementation of event listener to exit button 
+            a.) Serves to send a message to server.js to know what message is being sent. 
+            b.) After button is pressed, the user will be brought back to the join screen.
+        iv.) Implementation to check when someone else sends a messsage to you, this will allow it 
+            to be displayed properly to your view.
+        v.) implementation of renderMessage() function
+            a.) Serves to send a message to the user through three cases: when you sent a message, someone
+            else sends a message, or when someone else has left/joined the chatroom server.
+            b.) further html elements to implement these cases in the if statements.
+
+    2.) Added index.html file
+        i.) Linked together the two css style sheets : style.css & reset.css.
+        ii.) Added div container for the entire structure of the app.
+        iii.) added div container for when someone inputs their username.
+            a.) added div container for join button.
+            b.) added div container for username retrieving.
+        iv.) added div container for the chat screen.
+            a.) added div container for header and exit button.
+            b.) added div container for messages where every message will be appended to this div class.
+            c.) added div container for type bar and send button.
+        v.) added embedding js files: code.js & socket.io/socket.io.js
+
+    3.) Added reset.jss
+        i.) set of CSS rules that resets the styling of all HTML elements to a baseline that will look
+        presentable.
+        ii.) added display roles for how the page will look to the screen.
+        
+    4.) Added style.css
+        i.) style sheet block for the body, app, screen and the form.
+        ii.) For screen, added .form, .form-input, h2, .form-input label, .form-input input, and .form-input button.
+        iii.) For chat-screen, added .header, .header .logo, .header button, .messages(for every case that the
+            message can be displayed and its updates), .typebox, .typebox input, and .typebox button. 
+
+    5.) Added server.js
+        i.) Added functionality to create a server using the html module and a socket.
+        ii.) Connectivity that allows for a client to connect to a server using the socket.
