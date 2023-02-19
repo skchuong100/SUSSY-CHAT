@@ -6,33 +6,42 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SUSSY CHAT</title>
+    <!-- linking css style sheets -->
     <link rel="stylesheet" href="reset.css">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="styles/join-page.css">
 </head>
 
 <body>
+    <!-- div container for the entire app -->
     <div class="app">
+        <!-- div container for the joining screen when inputting username -->
         <div class="screen join-screen active">
+            <!-- div container is where the user inputs their username, and has the ability to click join button -->
             <div class="form">
+                <!-- name in the front screen -->
                 <h2>Join Sussy Chatroom</h2>
+                <!-- div for getting the username -->
                 <div class="form-input">
                     <label>Username</label>
                     <input type="text" id="username">
                 </div>
+                <!-- join button -->
                 <div class="form-input">
                     <button id="join-user">Join</button>
                 </div>
             </div>
         </div>
+        <!-- div container is for the chatting screen -->
         <div class="screen chat-screen">
+            <!-- div container for header and exit button -->
             <div class="header">
                 <div class="logo">Chatroom</div>
                 <button id="exit-chat">Exit</button>
             </div>
+            <!-- div container for messages, all messages will be appended to this div class -->
             <div class="messages">
-
             </div>
+            <!-- div container for the type bar and the send button -->
             <div class="typebox">
                 <input type="text" id="message-input">
                 <button id="send-message">Send</button>
@@ -40,6 +49,7 @@
         </div>
     </div>
 
+    <!-- embedding js files here -->
     <script type="text/javascript" src="socket.io/socket.io.js"></script>
     <script type="text/javascript" src="code.js"></script>
 </body>
