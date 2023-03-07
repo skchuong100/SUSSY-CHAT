@@ -1,3 +1,5 @@
+const res = require("express/lib/response");
+
 //Key
 let keyArray = [];
 
@@ -18,7 +20,19 @@ function KeyGen(length){
     }
     return result;
 }
-console.log(KeyGen(textArray.length))
-
 //Convert character to binary
 //charToBinary(array[Message.length])
+function Char2Binary(keyid){
+    let result = [];
+    for (var i = 0; i < keyid.length; i++){
+        var x = keyid[i].charCodeAt(0).toString(2);
+        result.push(Array(8-x.length+1).join("0") + x);
+    }
+    return result;
+}
+var key = KeyGen(textArray.length);
+console.log(key);
+let keyBinary = Char2Binary(key);
+let textBinary = Char2Binary(textArray);
+console.log(keyBinary);
+console.log(textBinary);
