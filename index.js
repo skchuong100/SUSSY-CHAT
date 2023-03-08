@@ -36,3 +36,19 @@ let keyBinary = Char2Binary(key);
 let textBinary = Char2Binary(textArray);
 console.log(keyBinary);
 console.log(textBinary);
+
+
+//XOR
+function xorFunction(binaryText, KeyTextBinary){
+    let result = [];
+    for(var i = 0; i < binaryText.length; i++){
+        result[i] = binaryText[i]^KeyTextBinary[i];
+    }
+    return result;
+}
+
+//XOR Function(PlainTextBinary, KeyTextBinary) = Encryption
+xorFunction(plainText,keyBinary);
+
+//XOR Function(CipherTextBinary, KeyTextBinary) = Decryption
+xorFunction(cipherBinary, keyBinary);
