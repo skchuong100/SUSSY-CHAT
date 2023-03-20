@@ -3,7 +3,7 @@ class OnePad {
 
     }
     AddKey(key){
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-./{}[]^_~`';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-./{}[]^_~`?|@<>;:';
         while (key.length < 128){
             key.push(characters.charAt(Math.random() * characters.length));
         }
