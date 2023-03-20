@@ -1,6 +1,6 @@
 class OnePad {
     constructor(){
-        
+
     }
     AddKey(key){
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-./{}[]^_~`';
@@ -13,7 +13,7 @@ class OnePad {
     //keyGenerator()
     KeyGen(length){
         let partKey = [];
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-./{}[]^_~`';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-./{}[]^_~`?|@<>;:';
         let counter = 0;
         while (counter < length){
             partKey.push(characters.charAt(Math.random() * characters.length));
@@ -50,29 +50,28 @@ class OnePad {
     }
 
 }
-/*
+
 let input = 'Hi my name is Spencer';
 let plainText = Array.from(input);
-console.log(plainText);
+//console.log(plainText);
 const cipher = new OnePad(plainText);
 let key = cipher.KeyGen(plainText.length);
 let keyBinary = cipher.Char2Binary(key);
-console.log(keyBinary);
+//console.log(keyBinary);
 let textBinary = cipher.Char2Binary(plainText);
-console.log('textBinary');
-console.log(textBinary);
-console.log('keyBinary');
-console.log(keyBinary);
+//console.log('textBinary');
+//console.log(textBinary);
+//console.log('keyBinary');
+//console.log(keyBinary);
 //XOR Function(PlainTextBinary, KeyTextBinary) = Encryption
 let cipherBinary = cipher.xorFunction(textBinary,keyBinary);
 console.log('cipherBinary');
 console.log(cipherBinary);
-
+console.log(cipherBinary.map(bin => String.fromCharCode(parseInt(bin, 2))).join(' '))
 //XOR Function(CipherTextBinary, KeyTextBinary) = Decryption
 let decrypt = cipher.xorFunction(cipherBinary, keyBinary);
-console.log('Decrypted binary');
-console.log(decrypt);
-let answer= decrypt.map(bin => String.fromCharCode(parseInt(bin, 2))).join(' ');
-console.log('Message');
-console.log(answer);
-*/
+//console.log('Decrypted binary');
+//console.log(decrypt);
+//let answer= decrypt.map(bin => String.fromCharCode(parseInt(bin, 2))).join(' ');
+//console.log('Message');
+//console.log(answer);
