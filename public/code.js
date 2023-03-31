@@ -9,6 +9,8 @@
     // local variable to hold the username
     let uname;
 
+
+
     // adding event listener to when join button is clicked in the joining screen
     app.querySelector(".join-screen #join-user").addEventListener("click", function () {
         // getting value of the username textbox input, stopping if empty
@@ -55,6 +57,17 @@
         socket.emit("exituser", uname);
         window.location.href = window.location.href;
     });
+
+    const roomContainer = document.getElementById('room-container');
+    socket.on('room-created', room => {
+        const roomElement = document.createElement('div');
+        roomElement.innerText = room;
+        const roomLink = document.createElement('a');
+        roomLink.href = `/${room}`
+        roomLink.innerText = "join"
+        roomContainer.append(roomElement)
+        roomContainer.append(roomLink)
+    })
 
     socket.on("update", function (update) {
         renderMessage("update", update);
