@@ -4,6 +4,13 @@ class OnePad {
     }
 
     //Generator a random key
+    AddKey(key){
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-./{}[]^_~`';
+        while (key.length < 128){
+            key.push(characters.charAt(Math.random() * characters.length));
+        }
+        return key;
+    }
     //keyGenerator()
     KeyGen(text, length){
         let partKey = [];
@@ -15,16 +22,14 @@ class OnePad {
             let dualIndex = this.Char2Binary(text[counter]);
             let testBinary = this.xorFunction(dualIndex, charIndex);
             let testNumber = parseInt(testBinary, 2);
-            console.log(testNumber);
-            if (testNumber > 33 && testNumber < 126){
+            if (testNumber >= 33 && testNumber <= 126){
                 partKey.push(charTest);
                 counter += 1;
                 
             }
-            //partKey.push(characters.charAt(Math.random() * characters.length));
-            //counter += 1;
         }
-        return partKey;
+        let result = this.AddKey(partKey);
+        return result;
     }
     //Convert character to binary
     //charToBinary(array[Message.length])
