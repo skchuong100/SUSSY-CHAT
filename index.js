@@ -80,6 +80,9 @@ class OnePad {
                 //Add a 0 to the beginning of the binary
                 x = '0' + x;
             }
+            if (x = '00111111'){
+                x = (parseInt(binaryText[i], 2).toString(10) ^ parseInt(KeyTextBinary[i], 2).toString(10)).toString(2);
+                }
             //Push the variable at the end of the array
             result.push(x);
         }
