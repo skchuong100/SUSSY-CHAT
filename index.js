@@ -1,3 +1,5 @@
+/*
+//Plan a
 class OnePad {
     constructor(){
 
@@ -6,7 +8,7 @@ class OnePad {
     //Generator a random key
     AddKey(key){
         //Set up a variable containing a string of letters, characters, and symbols
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-./{}[]^_~`';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-./{}[]^_~`?|@<>;:';
         //Construct a while loop to until the key is 128 in length
         while (key.length < 128){
             //Choose a random index from variable and push it to the end of the key
@@ -24,25 +26,9 @@ class OnePad {
         //Create a variable to act as a counter
         let counter = 0;
         while (counter < length){
-            //Select a random character from the variable 
-            let charTest = characters.charAt(Math.random() * characters.length);
-            //Convert the character to binary
-            let charIndex = this.Char2Binary(charTest);
-            //Convert the character from the plainText into a binary
-            let dualIndex = this.Char2Binary(text[counter]);
-            //Do a xor on both random-character binary and plainText-binary into a binary
-            let testBinary = this.xorFunction(dualIndex, charIndex);
-            //Change the resulting binary into a number
-            let testNumber = parseInt(testBinary, 2);
-            //Check if the number is within 33 and 126
-            if (testNumber >= 33 && testNumber <= 126){
-                //Put the character into the end of the key 
-                partKey.push(charTest);
-                //Increment the counter 
-                counter += 1;
-            }
+            partKey.push(characters.charAt(Math.random() * characters.length));
+            counter += 1;
         }
-        //Add more characters into the key to make it 128 in length
         let result = this.AddKey(partKey);
         return result;
     }
@@ -80,9 +66,6 @@ class OnePad {
                 //Add a 0 to the beginning of the binary
                 x = '0' + x;
             }
-            if (x = '00111111'){
-                x = (parseInt(binaryText[i], 2).toString(10) ^ parseInt(KeyTextBinary[i], 2).toString(10)).toString(2);
-                }
             //Push the variable at the end of the array
             result.push(x);
         }
@@ -114,3 +97,89 @@ console.log(decrypt);
 let answer= decrypt.map(bin => String.fromCharCode(parseInt(bin, 2))).join(' ');
 //console.log('Message');
 console.log(answer);
+*/
+
+//Plan B
+class amalgamation{
+    constructor(){
+        this.alpha = Array.from('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-./{}[]^_~`?|@<>;: ');
+    }
+    KeyGen(){
+        let key = [];
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-./{}[]^_~`?|@<>;: ';
+        while (key.length < 128){
+            key.push(characters.charAt(Math.random() * characters.length));
+        }
+        return key;
+    }
+    encrypion(plainText, key){
+        let result = [];
+        let counter = 0;
+        while (counter < plainText.length){
+            let a = this.alpha.indexOf(plainText[counter]) + 1;
+            let b = this.alpha.indexOf(key[counter]) + 1;
+            let z = a + b;
+            let y =  this.alpha.indexOf(this.alpha[this.alpha.length - 1]) + 1;
+            let modify = z%y;
+            if (modify == 0){
+                modify = this.alpha.indexOf(this.alpha[this.alpha.length - 1]) + 1;
+            }
+            let sub = modify - 1;
+            result.push(this.alpha[sub]);
+            counter += 1;
+        }
+        return result;
+    }
+    decryption(plainText, cipherText, key){
+        let result = [];
+        let counter = 0;
+        while  (counter < cipherText.length){
+            let a = this.alpha.indexOf(cipherText[counter]) + 1;
+            let b = this.alpha.indexOf(key[counter]) + 1;
+            let z = a - b;
+            let y =  this.alpha.indexOf(this.alpha[this.alpha.length - 1]) + 1;
+            if (z == 0){
+                z = this.alpha.indexOf(this.alpha[this.alpha.length - 1]) + 1;
+            }
+            let sub = z - 1;
+            if (sub < 0){
+                let j = z - 1;
+                let flip = y + j;
+                let test = this.alpha[flip];
+                if (plainText[counter] == test){
+                    result.push(this.alpha[flip]);
+                    
+                }
+                else{
+                    let k = z + 1
+                    let flip = y + k;
+                    result.push(this.alpha[flip]);
+                }
+            }
+            else{
+                result.push(this.alpha[sub]);
+            }
+            counter += 1;
+        }
+        return result;
+    }
+} 
+let messages = ['Peepee poopoo', 'Hi, my name is Spencer!', 'Nice to meet you', 'You got the goods?'];
+const cipher = new amalgamation();
+let key = cipher.KeyGen();
+console.log(key);
+for (let x = 0; x < messages.length; x++){
+    let plainText = Array.from(messages[x]);
+    console.log('plainText');
+    console.log(plainText);
+    let cipherText = cipher.encrypion(plainText, key);
+    console.log('cipherText');
+    console.log(cipherText);
+    let decrypted = cipher.decryption(plainText, cipherText, key);
+    console.log('decrypted text');
+    console.log(decrypted);
+}
+
+    
+
+
