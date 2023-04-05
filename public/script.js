@@ -46,6 +46,7 @@ socket.on('room-created', room => {
   // appending the elements to the needed spots
   roomContainer.append(roomElement)
   roomContainer.append(roomLink)
+  console.log(room)
 })
 
 socket.on('chat-message', data => {

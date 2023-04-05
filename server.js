@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
+const fs = require("fs");
 
 app.set('views', './views')
 app.set('view engine', 'ejs')
@@ -10,7 +11,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static(__dirname + '/public'));
 
 // implement the key
-const rooms = { thisRoomIsEncrypted: { encryptionKeyRoom: 0000000000, users: {} } } // array to contain all the rooms we have at the moment
+const rooms = {} // array to contain all the rooms we have at the moment
 
 // default room we are taken too
 app.get('/', (req, res) => {
@@ -24,7 +25,29 @@ app.post('/room', (req, res) => {
   if (rooms[req.body.room] != null) {
     return res.redirect('/')
   }
-  // gonna have to modify to have encryption
+  // checking if the checkbox is clicked
+  if (req.body.roomEncryptionRequired === 'on') {
+    const encryptionKey = "exampleKey"
+    const fileName = "encryptionFile"
+    const fileContent = `${encryptionKey}`
+    fs.writeFile(fileName, fileContent, (err) => { })
+    const filePath = __dirname + "/" + fileName
+    if (!res.writableEnded) {
+      res.setTimeout(10000)
+      res.download(filePath, fileName, (err) => {
+        if (err) {
+          console.log("Error downloading the file: ", err)
+        }
+      })
+    }
+
+    // fs.unlink(filePath, (err) => {
+    //   if (err) {
+    //     console.log(err)
+    //   }
+    // })
+
+  }
   // create a room object where key: name of room value: users in room
   rooms[req.body.room] = { users: {} }
   // redirect person to the room they just created

@@ -21,9 +21,9 @@
       <% }) %>
   </div>
   <form action="/room" method="POST">
-    <input name="room" type="text" required maxlength="5">
+    <input name="room" type="text" required maxlength="128">
     <label for="encryptedRequired">Encryption?</label>
-    <input type="checkbox" id="encryptedRequired">
+    <input type="checkbox" id="encryptedRequired" name="roomEncryptionRequired">
     <button type="submit">New Room</button>
   </form>
 </body>
