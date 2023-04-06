@@ -85,6 +85,7 @@ form.addEventListener('submit', (event) => {
   event.preventDefault();
   const formData = new FormData(form);
   formData.append('roomName', roomName)
+  formData.append('userId', socket.id)
   fetch("/upload", {
     method: 'POST',
     body: formData

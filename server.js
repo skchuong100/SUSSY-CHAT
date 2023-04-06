@@ -116,7 +116,9 @@ app.post('/upload', upload.single('file'), (req, res) => {
     }
 
     const fileContents = data.toString()
-    console.log(fileContents)
+    // console.log(fileContents)
+    // console.log(rooms[req.body.roomName].users[req.body.userId])
+    rooms[req.body.roomName].users[req.body.userId].encryptionKeyUser = fileContents
     console.log(rooms[req.body.roomName])
   })
 });
