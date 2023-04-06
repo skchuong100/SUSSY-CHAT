@@ -36,11 +36,11 @@ app.post('/room', (req, res) => {
     return res.redirect('/')
   }
   // creating arbitrary encryption key
-  let encryptionKey = 'pretend this is a public key!!!';
+  let encryptionKey = keygen();
   // checking if the checkbox is clicked
   if (req.body.roomEncryptionRequired === 'on') {
     // encrytionKey = create(); //create the key here
-    fse.outputFile(`C:/Users/${username}/Downloads/PublicKey.txt`, encryptionKey)
+    fse.outputFile(`C:/Users/${username}/Downloads/privateKey.txt`, encryptionKey)
       .then(() => {
         console.log('The file has been saved to the Downloads directory!');
       })
@@ -117,7 +117,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
 
     const fileContents = data.toString()
     console.log(fileContents)
-
+    // console.log(req)
     // console.log(rooms[room])
   })
 });
