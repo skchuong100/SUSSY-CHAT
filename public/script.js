@@ -46,6 +46,7 @@ socket.on('room-created', room => {
   // appending the elements to the needed spots
   roomContainer.append(roomElement)
   roomContainer.append(roomLink)
+  console.log(room)
 })
 
 socket.on('chat-message', data => {
@@ -76,12 +77,25 @@ function appendMessage(message) {
   messageContainer.append(messageElement)
 }
 
-function download(url) {
-  console.log(url)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = url.split('/').pop()
-  document.body.appendChild(a)
-  a.click()
-  document.body.removeChild(a)
-}
+
+
+// trying to upload file here:
+const form = document.getElementById('file-upload-form')
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const formData = new FormData(form);
+  fetch("/upload", {
+    method: 'POST',
+    body: formData
+  })
+    .then((response) => {
+      if (response.ok) {
+        console.log("File upload okay")
+      } else {
+        console.log("failed upload")
+      }
+    })
+    .catch((error) => {
+      console.log("error uploading file: ", error)
+    })
+})

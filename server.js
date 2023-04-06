@@ -1,8 +1,14 @@
+// getting the express library
 const express = require('express')
+// creating an express object
 const app = express()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
-const fs = require('fs')
+
+const fs = require("fs");
+
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
 app.set('views', './views')
 app.set('view engine', 'ejs')
@@ -11,7 +17,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static(__dirname + '/public'));
 
 // implement the key
-const rooms = { thisRoomIsEncrypted: { encryptionKeyRoom: 0000000000, users: {} } } // array to contain all the rooms we have at the moment
+const rooms = {} // array to contain all the rooms we have at the moment
 
 // default room we are taken too
 app.get('/', (req, res) => {
@@ -26,21 +32,20 @@ app.post('/room', (req, res) => {
   if (rooms[req.body.room] != null) {
     return res.redirect('/')
   }
-  //console.log(req.body.check)
-  //request is an object
-  //and the body is a domain. (pertaining to req.body)
-  if(req.body.check === 'on'){
-    encryptKey = 'pretend this is a public key........'
-    const a = fs.writeFile('Output.txt', encryptData, (err) =>{
-      if(err) throw err 
+  // creating arbitrary encryption key
+  let encryptionKey = "0000000000000000000000000000000";
+  // checking if the checkbox is clicked
+  if (req.body.roomEncryptionRequired === 'on') {
+    // encrytionKey = create(); //create the key here
+    const a = fs.writeFile('privateKey.txt', encryptionKey, (err) => {
+      if (err) throw err;
     })
-    rooms[req.body.room] = { rncryptionKeyRoom : encryptKey,users: {} }
-    io.emit('download', a)
+
+    rooms[req.body.room] = { encryptionKeyRoom: encryptionKey, users: {} }
+  } else {
+    // create a room object where key: name of room value: users in room
+    rooms[req.body.room] = { users: {} }
   }
-  // gonna have to modify to have encryption
-  // create a room object where key: name of room value: users in room
-  rooms[req.body.room] = { users: {encryptionKeyUser: 0000000000000000000000} }
-  //console.log(req.body.room)
   // redirect person to the room they just created
   res.redirect(req.body.room)
   // Send info to client side for new room
@@ -91,3 +96,23 @@ function getUserRooms(socket) {
     return names
   }, [])
 }
+
+
+// trying to get an upload
+app.post('/upload', upload.single('file'), (req, res) => {
+  console.log("file uploaded: ", req.file.originalname)
+
+  // getting the contents of the file
+  const filePath = req.file.path;
+  console.log("file contents: ", req.file)
+  fs.readFile(filePath, (err, data) => {
+    if (err) {
+      console.log("Error reading file: ", err)
+    }
+
+    const fileContents = data.toString()
+    console.log(fileContents)
+    console.log(req)
+    // console.log(rooms)
+  })
+});
