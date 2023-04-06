@@ -25,28 +25,14 @@ app.post('/room', (req, res) => {
   if (rooms[req.body.room] != null) {
     return res.redirect('/')
   }
+  // creating arbitrary encryption key
+  let encrytionKey = "0000000000000000000000000000000";
   // checking if the checkbox is clicked
   if (req.body.roomEncryptionRequired === 'on') {
-    const encryptionKey = "exampleKey"
-    const fileName = "encryptionFile"
-    const fileContent = `${encryptionKey}`
-    fs.writeFile(fileName, fileContent, (err) => { })
-    const filePath = __dirname + "/" + fileName
-    if (!res.writableEnded) {
-      res.setTimeout(10000)
-      res.download(filePath, fileName, (err) => {
-        if (err) {
-          console.log("Error downloading the file: ", err)
-        }
-      })
-    }
-
-    // fs.unlink(filePath, (err) => {
-    //   if (err) {
-    //     console.log(err)
-    //   }
-    // })
-
+    // encrytionKey = create(); //create the key here
+    const a = fs.writeFile('privateKey.ppk', encrytionKey, (err) => {
+      if (err) throw err;
+    })
   }
   // create a room object where key: name of room value: users in room
   rooms[req.body.room] = { users: {} }
