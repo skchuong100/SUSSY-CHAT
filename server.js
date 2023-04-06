@@ -31,16 +31,19 @@ app.post('/room', (req, res) => {
     return res.redirect('/')
   }
   // creating arbitrary encryption key
-  let encrytionKey = "0000000000000000000000000000000";
+  let encryptionKey = "0000000000000000000000000000000";
   // checking if the checkbox is clicked
   if (req.body.roomEncryptionRequired === 'on') {
     // encrytionKey = create(); //create the key here
-    const a = fs.writeFile('privateKey.ppk', encrytionKey, (err) => {
+    const a = fs.writeFile('privateKey.txt', encryptionKey, (err) => {
       if (err) throw err;
     })
+
+    rooms[req.body.room] = { encryptionKeyRoom: encryptionKey, users: {} }
+  } else {
+    // create a room object where key: name of room value: users in room
+    rooms[req.body.room] = { users: {} }
   }
-  // create a room object where key: name of room value: users in room
-  rooms[req.body.room] = { users: {} }
   // redirect person to the room they just created
   res.redirect(req.body.room)
   // Send info to client side for new room
@@ -95,4 +98,19 @@ function getUserRooms(socket) {
 // trying to get an upload
 app.post('/upload', upload.single('file'), (req, res) => {
   console.log("file uploaded: ", req.file.originalname)
+
+  // getting the contents of the file
+  const filePath = req.file.path;
+  let fileContents;
+  console.log("file contents: ", req.file)
+  fs.readFile(filePath, (err, data) => {
+    if (err) {
+      console.log("Error reading file: ", err)
+    }
+
+    fileContents = data.toString()
+
+  })
+  console.log(fileContents)
+  console.log(rooms)
 });
