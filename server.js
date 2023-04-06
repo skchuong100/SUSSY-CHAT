@@ -1,8 +1,13 @@
+// getting the express library
 const express = require('express')
+// creating an express object
 const app = express()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const fs = require("fs");
+
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
 app.set('views', './views')
 app.set('view engine', 'ejs')
@@ -41,6 +46,7 @@ app.post('/room', (req, res) => {
   // Send info to client side for new room
   io.emit('room-created', req.body.room)
 })
+
 
 // dont udnerstasn this part as much
 app.get('/:room', (req, res) => {
@@ -84,3 +90,9 @@ function getUserRooms(socket) {
     return names
   }, [])
 }
+
+
+// trying to get an upload
+app.post('/upload', upload.single('file'), (req, res) => {
+  console.log("file uploaded: ", req.file.originalname)
+});

@@ -72,3 +72,26 @@ function appendMessage(message) {
   // appending the message div to the message container
   messageContainer.append(messageElement)
 }
+
+
+
+// trying to upload file here:
+const form = document.getElementById('file-upload-form')
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const formData = new FormData(form);
+  fetch("/upload", {
+    method: 'POST',
+    body: formData,
+  })
+    .then((response) => {
+      if (response.ok) {
+        console.log("File upload okay")
+      } else {
+        console.log("failed upload")
+      }
+    })
+    .catch((error) => {
+      console.log("error uploading file: ", error)
+    })
+})
