@@ -116,21 +116,27 @@ class amalgamation{
             //Add the randomly chosen character to the end of the array 
             key.push(characters.charAt(Math.random() * characters.length));
         }
+        let fullKey = '';
+        for (let x = 0; x < key.length; x++){
+            fullKey += key[x];
+        }
         //Return the key 
-        return key;
+        return fullKey;
     }
     //Encrypt the plaintext
     encrypion(plainText, key){
+        let plainTextArray = Array.from(plainText);
+        let keyArray = Array.from(key);
         //Set up an empty array 
         let result = [];
         //Set up a counter 
         let counter = 0;
         //Make a while loop to loop as the length of the plaintext
-        while (counter < plainText.length){
+        while (counter < plainTextArray.length){
             //Get the index of the first character of the plaintext plus 1
-            let a = this.alpha.indexOf(plainText[counter]) + 1;
+            let a = this.alpha.indexOf(plainTextArray[counter]) + 1;
             //Get the index of the first character of the key plus 1
-            let b = this.alpha.indexOf(key[counter]) + 1;
+            let b = this.alpha.indexOf(keyArray[counter]) + 1;
             //Add the value of the index together
             let z = a + b;
             //Get the length of the message
@@ -149,22 +155,29 @@ class amalgamation{
             //Increment the counter
             counter += 1;
         }
+        let resultString = '';
+        for (let y = 0; y < result.length; y++){
+            resultString += result[y];
+        }
         //return the resulting array
-        return result;
+        return resultString;
     }
     //Decrypt the cipher text 
 
     decryption(plainText, cipherText, key){
+        let plainTextArray = Array.from(plainText);
+        let keyArray = Array.from(key);
+        let cipherTextArray = Array.from(cipherText)
         //create an empty array
         let result = [];
         //create a conuter 
         let counter = 0;
         //Create a while loop that will loop the length of the cipher text
-        while  (counter < cipherText.length){
+        while  (counter < cipherTextArray.length){
             //Get the index of the first character of the ciphertext plus 1
-            let a = this.alpha.indexOf(cipherText[counter]) + 1;
+            let a = this.alpha.indexOf(cipherTextArray[counter]) + 1;
             //Get the index of the first character of the key plus 1
-            let b = this.alpha.indexOf(key[counter]) + 1;
+            let b = this.alpha.indexOf(keyArray[counter]) + 1;
             //Subtract a and b 
             let z = a - b;
             //Get the length of the message
@@ -185,7 +198,7 @@ class amalgamation{
                 //Get the character from the variable array 
                 let test = this.alpha[flip];
                 //Check if the character retrieved matches of the character of the plaintext character 
-                if (plainText[counter] == test){
+                if (plainTextArray[counter] == test){
                     //Push the character at the end of the array 
                     result.push(this.alpha[flip]);
                 }
@@ -205,16 +218,21 @@ class amalgamation{
             //Increment the counter 
             counter += 1;
         }
+        let resultString = '';
+        for (let y = 0; y < result.length; y++){
+            resultString += result[y];
+        }
         //return the resulting array 
-        return result;
+        return resultString;
     }
 } 
-let messages = ['Peepee poopoo', 'Hi, my name is Spencer!', 'Nice to meet you', 'You got the goods?'];
+let messages = ['Peepee poopoo', 'Hi, my name is Spencer and her name is Yuwei!', 'Nice to meet you', 'You got the goods?'];
 const cipher = new amalgamation();
 let key = cipher.KeyGen();
 console.log(key);
+
 for (let x = 0; x < messages.length; x++){
-    let plainText = Array.from(messages[x]);
+    let plainText = messages[x];
     console.log('plainText');
     console.log(plainText);
     let cipherText = cipher.encrypion(plainText, key);
@@ -223,7 +241,10 @@ for (let x = 0; x < messages.length; x++){
     let decrypted = cipher.decryption(plainText, cipherText, key);
     console.log('decrypted text');
     console.log(decrypted);
+    console.log('');
+    
 }
+
 
     
 
