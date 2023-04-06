@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
 
 // sending post request to create new room
 app.post('/room', (req, res) => {
-  
+
   // block checks if roomName is empty, redirects to home if so
   if (rooms[req.body.room] != null) {
     return res.redirect('/')
@@ -49,7 +49,7 @@ app.post('/room', (req, res) => {
   // redirect person to the room they just created
   res.redirect(req.body.room)
   // Send info to client side for new room
-  io.emit('room-created', rooms[req.body.room].encryptionKeyRoom)
+  io.emit('room-created', rooms[req.body.room])
 })
 
 
@@ -72,7 +72,6 @@ io.on('connection', socket => {
     socket.join(room)
     // socket.id is unique id given by socket, we assign the key: socket.id and value to be the name of the user
     rooms[room].users[socket.id] = name
-    rooms[room].users[encryptionKeyUser] = encryptKey
     socket.to(room).broadcast.emit('user-connected', name)
   })
   // waitin for a send-chat-message function call with room, message data
@@ -104,7 +103,6 @@ app.post('/upload', upload.single('file'), (req, res) => {
 
   // getting the contents of the file
   const filePath = req.file.path;
-  console.log("file contents: ", req.file)
   fs.readFile(filePath, (err, data) => {
     if (err) {
       console.log("Error reading file: ", err)
@@ -112,7 +110,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
 
     const fileContents = data.toString()
     console.log(fileContents)
-    console.log(req)
-    // console.log(rooms)
+
+    // console.log(rooms[room])
   })
 });
