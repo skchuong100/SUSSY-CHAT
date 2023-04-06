@@ -6,6 +6,9 @@ const server = require('http').Server(app)
 const io = require('socket.io')(server)
 
 const fs = require("fs");
+const fse = require('fs-extra')
+const os = require('os');
+const username = os.userInfo().username;
 
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
@@ -33,13 +36,17 @@ app.post('/room', (req, res) => {
     return res.redirect('/')
   }
   // creating arbitrary encryption key
-  let encryptionKey = "0000000000000000000000000000000";
+  let encryptionKey = 'pretend this is a public key!!!';
   // checking if the checkbox is clicked
   if (req.body.roomEncryptionRequired === 'on') {
     // encrytionKey = create(); //create the key here
-    const a = fs.writeFile('privateKey.txt', encryptionKey, (err) => {
-      if (err) throw err;
+    fse.outputFile(`C:/Users/${username}/Downloads/PublicKey.txt`, encryptionKey)
+    .then(() => {
+      console.log('The file has been saved to the Downloads directory!');
     })
+    .catch(err => {
+      console.error(err)
+   })
 
     rooms[req.body.room] = { encryptionKeyRoom: encryptionKey, users: {} }
   } else {
@@ -72,7 +79,7 @@ io.on('connection', socket => {
     socket.join(room)
     // socket.id is unique id given by socket, we assign the key: socket.id and value to be the name of the user
     rooms[room].users[socket.id] = name
-    rooms[room].users[encryptionKeyUser] = encryptKey
+    //rooms[room].users[encryptionKeyUser] = encryptionKey
     socket.to(room).broadcast.emit('user-connected', name)
   })
   // waitin for a send-chat-message function call with room, message data
