@@ -4,7 +4,6 @@ const express = require('express')
 const app = express()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
-
 const fs = require("fs");
 const fse = require('fs-extra')
 const os = require('os');
@@ -36,7 +35,7 @@ app.post('/room', (req, res) => {
     return res.redirect('/')
   }
   // creating arbitrary encryption key
-  let encryptionKey = keygen();
+  let encryptionKey = '00000000000000000000000000000'
   // checking if the checkbox is clicked
   if (req.body.roomEncryptionRequired === 'on') {
     // encrytionKey = create(); //create the key here
@@ -110,6 +109,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
 
   // getting the contents of the file
   const filePath = req.file.path;
+  // console.log(req.body.roomName)
   fs.readFile(filePath, (err, data) => {
     if (err) {
       console.log("Error reading file: ", err)
@@ -117,7 +117,6 @@ app.post('/upload', upload.single('file'), (req, res) => {
 
     const fileContents = data.toString()
     console.log(fileContents)
-    // console.log(req)
-    // console.log(rooms[room])
+    console.log(rooms[req.body.roomName])
   })
 });

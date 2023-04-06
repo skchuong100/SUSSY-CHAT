@@ -84,6 +84,7 @@ const form = document.getElementById('file-upload-form')
 form.addEventListener('submit', (event) => {
   event.preventDefault();
   const formData = new FormData(form);
+  formData.append('roomName', roomName)
   fetch("/upload", {
     method: 'POST',
     body: formData
