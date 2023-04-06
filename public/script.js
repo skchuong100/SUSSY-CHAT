@@ -82,7 +82,7 @@ form.addEventListener('submit', (event) => {
   const formData = new FormData(form);
   fetch("/upload", {
     method: 'POST',
-    body: formData,
+    body: formData
   })
     .then((response) => {
       if (response.ok) {

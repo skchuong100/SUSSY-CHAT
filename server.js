@@ -101,16 +101,15 @@ app.post('/upload', upload.single('file'), (req, res) => {
 
   // getting the contents of the file
   const filePath = req.file.path;
-  let fileContents;
   console.log("file contents: ", req.file)
   fs.readFile(filePath, (err, data) => {
     if (err) {
       console.log("Error reading file: ", err)
     }
 
-    fileContents = data.toString()
-
+    const fileContents = data.toString()
+    console.log(fileContents)
+    console.log(req)
+    // console.log(rooms)
   })
-  console.log(fileContents)
-  console.log(rooms)
 });
