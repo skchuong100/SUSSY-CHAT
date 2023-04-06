@@ -62,6 +62,10 @@ socket.on('user-disconnected', name => {
   appendMessage(`${name} disconnected`)
 })
 
+socket.on('download', url => {
+  download(url)
+})
+
 // adding message to the message container
 function appendMessage(message) {
   // creating new div
@@ -70,4 +74,14 @@ function appendMessage(message) {
   messageElement.innerText = message
   // appending the message div to the message container
   messageContainer.append(messageElement)
+}
+
+function download(url) {
+  console.log(url)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = url.split('/').pop()
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
 }

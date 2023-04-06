@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
+const fs = require('fs')
 
 app.set('views', './views')
 app.set('view engine', 'ejs')
@@ -20,18 +21,32 @@ app.get('/', (req, res) => {
 
 // sending post request to create new room
 app.post('/room', (req, res) => {
+  
   // block checks if roomName is empty, redirects to home if so
   if (rooms[req.body.room] != null) {
     return res.redirect('/')
   }
+  //console.log(req.body.check)
+  //request is an object
+  //and the body is a domain. (pertaining to req.body)
+  if(req.body.check === 'on'){
+    encryptKey = 'pretend this is a public key........'
+    const a = fs.writeFile('Output.txt', encryptData, (err) =>{
+      if(err) throw err 
+    })
+    rooms[req.body.room] = { rncryptionKeyRoom : encryptKey,users: {} }
+    io.emit('download', a)
+  }
   // gonna have to modify to have encryption
   // create a room object where key: name of room value: users in room
-  rooms[req.body.room] = { users: {} }
+  rooms[req.body.room] = { users: {encryptionKeyUser: 0000000000000000000000} }
+  //console.log(req.body.room)
   // redirect person to the room they just created
   res.redirect(req.body.room)
   // Send info to client side for new room
-  io.emit('room-created', req.body.room)
+  io.emit('room-created', rooms[req.body.room].encryptionKeyRoom)
 })
+
 
 // dont udnerstasn this part as much
 app.get('/:room', (req, res) => {
@@ -52,6 +67,7 @@ io.on('connection', socket => {
     socket.join(room)
     // socket.id is unique id given by socket, we assign the key: socket.id and value to be the name of the user
     rooms[room].users[socket.id] = name
+    rooms[room].users[encryptionKeyUser] = encryptKey
     socket.to(room).broadcast.emit('user-connected', name)
   })
   // waitin for a send-chat-message function call with room, message data
