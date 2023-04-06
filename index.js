@@ -102,65 +102,110 @@ console.log(answer);
 //Plan B
 class amalgamation{
     constructor(){
+        //Set up a variable array 
         this.alpha = Array.from('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-./{}[]^_~`?|@<>;: ');
     }
+    //Generate a key 
     KeyGen(){
+        //Set up an empty array
         let key = [];
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-./{}[]^_~`?|@<>;: ';
+        //Set up a variable string
+        let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-./{}[]^_~`?|@<>;: '
+        //Generate a key up to 128 in length
         while (key.length < 128){
+            //Add the randomly chosen character to the end of the array 
             key.push(characters.charAt(Math.random() * characters.length));
         }
+        //Return the key 
         return key;
     }
+    //Encrypt the plaintext
     encrypion(plainText, key){
+        //Set up an empty array 
         let result = [];
+        //Set up a counter 
         let counter = 0;
+        //Make a while loop to loop as the length of the plaintext
         while (counter < plainText.length){
+            //Get the index of the first character of the plaintext plus 1
             let a = this.alpha.indexOf(plainText[counter]) + 1;
+            //Get the index of the first character of the key plus 1
             let b = this.alpha.indexOf(key[counter]) + 1;
+            //Add the value of the index together
             let z = a + b;
+            //Get the length of the message
             let y =  this.alpha.indexOf(this.alpha[this.alpha.length - 1]) + 1;
+            //Mod the sum 
             let modify = z%y;
+            //Check if the modulo results in a 0
             if (modify == 0){
-                modify = this.alpha.indexOf(this.alpha[this.alpha.length - 1]) + 1;
+                //Change the value of the modify to the length of the message 
+                modify = y;
             }
+            //Subtract the modify by 1
             let sub = modify - 1;
+            //Push the character at the index of the variable array to the end of the array 
             result.push(this.alpha[sub]);
+            //Increment the counter
             counter += 1;
         }
+        //return the resulting array
         return result;
     }
+    //Decrypt the cipher text 
+
     decryption(plainText, cipherText, key){
+        //create an empty array
         let result = [];
+        //create a conuter 
         let counter = 0;
+        //Create a while loop that will loop the length of the cipher text
         while  (counter < cipherText.length){
+            //Get the index of the first character of the ciphertext plus 1
             let a = this.alpha.indexOf(cipherText[counter]) + 1;
+            //Get the index of the first character of the key plus 1
             let b = this.alpha.indexOf(key[counter]) + 1;
+            //Subtract a and b 
             let z = a - b;
+            //Get the length of the message
             let y =  this.alpha.indexOf(this.alpha[this.alpha.length - 1]) + 1;
+            //Check if the difference is a 0
             if (z == 0){
+                //Change the difference to the length of the array 
                 z = this.alpha.indexOf(this.alpha[this.alpha.length - 1]) + 1;
             }
+            //Subtract again by 1
             let sub = z - 1;
+            //Check if the difference is less than 0
             if (sub < 0){
+                //Subtract the difference again by 1
                 let j = z - 1;
+                //Add the length of the variable array to get a positive number 
                 let flip = y + j;
+                //Get the character from the variable array 
                 let test = this.alpha[flip];
+                //Check if the character retrieved matches of the character of the plaintext character 
                 if (plainText[counter] == test){
+                    //Push the character at the end of the array 
                     result.push(this.alpha[flip]);
-                    
                 }
                 else{
+                    //Add by 1
                     let k = z + 1
+                    //Add the length of the variable array to get a positive number 
                     let flip = y + k;
+                    //Push the character at the end of the array 
                     result.push(this.alpha[flip]);
                 }
             }
             else{
+                //Push the character at the end of the array 
                 result.push(this.alpha[sub]);
             }
+            //Increment the counter 
             counter += 1;
         }
+        //return the resulting array 
         return result;
     }
 } 
