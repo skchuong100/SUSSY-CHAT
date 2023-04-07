@@ -83,7 +83,7 @@ io.on('connection', socket => {
   // waitin for a send-chat-message function call with room, message data
   socket.on('send-chat-message', (room, message) => {
     // emit to the room we are currently with the function chat-message with the following data
-    socket.to(room).broadcast.emit('chat-message', { message: message, name: rooms[room].users[socket.id] })
+    socket.to(room).broadcast.emit('chat-message', { message: message, name: rooms[room].users[socket.id].name })
   })
   // waiting for the disconnect
   socket.on('disconnect', () => {
