@@ -225,6 +225,8 @@ class amalgamation{
         return resultString;
     }
 } 
+
+/*
 let messages = ['Hi, my name is Spencer and her name is Yuwei!', 'Nice to meet you', 'You got the goods?', 'We will meet at the Getty Museum at 9:00 AM'];
 const cipher = new amalgamation();
 let key = cipher.KeyGen();
@@ -243,6 +245,7 @@ for (let x = 0; x < messages.length; x++){
     console.log('');
     
 }
+*/
 
 
     
