@@ -4,7 +4,6 @@ class OnePad {
     constructor(){
 
     }
-    
     //Generator a random key
     AddKey(key){
         //Set up a variable containing a string of letters, characters, and symbols
@@ -226,7 +225,7 @@ class amalgamation{
         return resultString;
     }
 } 
-let messages = ['Peepee poopoo', 'Hi, my name is Spencer and her name is Yuwei!', 'Nice to meet you', 'You got the goods?'];
+let messages = ['Hi, my name is Spencer and her name is Yuwei!', 'Nice to meet you', 'You got the goods?', 'We will meet at the Getty Museum at 9:00 AM'];
 const cipher = new amalgamation();
 let key = cipher.KeyGen();
 console.log(key);
