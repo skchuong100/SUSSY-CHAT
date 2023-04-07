@@ -77,7 +77,7 @@ io.on('connection', socket => {
     // built-in function to join room we want
     socket.join(room)
     // socket.id is unique id given by socket, we assign the key: socket.id and value to be the name of the user
-    rooms[room].users[socket.id] = name
+    rooms[room].users[socket.id] = {name: name}
     socket.to(room).broadcast.emit('user-connected', name)
   })
   // waitin for a send-chat-message function call with room, message data

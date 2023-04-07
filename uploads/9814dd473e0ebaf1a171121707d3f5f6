@@ -1,0 +1,46 @@
+import java.util.ArrayList;
+
+/**
+ * DiningPhilosophers.java
+ *
+ * This program starts the dining philosophers problem.
+ *
+ */
+
+
+public class DiningPhilosophers
+{  
+   public static void main(String args[])
+   {
+    ArrayList<Philosopher> p = new ArrayList<>();
+    ///*
+    DiningServer ds = new DiningServerImple(p);
+    for(int k = 0; k < 5; k++){
+      p.add(new Philosopher(k, ds));
+    }
+    for(int i =  0; i < p.size(); i++){
+      p.get(i).start();
+    }
+    //*/
+    //DiningServer ds = new DiningServerImpl();
+    //for(int i = 0; i < 5; i++){
+      //new Philosopher(i, ds).start();
+    //}
+    /*
+     Philosopher p1 = new Philosopher(1, ds);
+     p.add(p1);
+     System.out.println(p1.geString());
+     p1.changeState(1);
+     System.out.println(p1.geString());
+     p1.changeState(2);
+     System.out.println(p1.geString());
+     System.out.println(p1.getID());
+      if(!p.get(0).geString().equals("EATING")){
+        System.out.println("successful");
+      } else{
+        System.out.println("not successful");
+      }
+      System.out.println(p.get(0).geString());
+      */
+   }
+}
