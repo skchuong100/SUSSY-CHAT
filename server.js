@@ -8,6 +8,9 @@ const fs = require("fs");
 const fse = require('fs-extra')
 const os = require('os');
 const username = os.userInfo().username;
+const amalgamation = require('./amalgamation.js'); // import the amalgamation.js file into server.js
+const am = new amalgamation(); // create instance of amalgamation class so that we can use its encryption functions.
+
 
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
@@ -34,23 +37,13 @@ app.post('/room', (req, res) => {
   if (rooms[req.body.room] != null) {
     return res.redirect('/')
   }
-  // creating arbitrary encryption key
-  let encryptionKey = '00000000000000000000000000000'
   // checking if the checkbox is clicked
   if (req.body.roomEncryptionRequired === 'on') {
-    // encrytionKey = create(); //create the key here
-    fse.outputFile(`C:/Users/${username}/Downloads/privateKey.txt`, encryptionKey)
-      .then(() => {
-        console.log('The file has been saved to the Downloads directory!');
-      })
-      .catch(err => {
-        console.error(err)
-      })
-
-    rooms[req.body.room] = { encryptionKeyRoom: encryptionKey, users: {} }
+    let encryptionKeyRoom = am.KeyGen() // generate a private Key for the room to represent the room is encrypted.
+    rooms[req.body.room] = { encryptionKeyRoom: encryptionKeyRoom, users: {} } // case where room is encrypted with an encryption key field.
   } else {
     // create a room object where key: name of room value: users in room
-    rooms[req.body.room] = { users: {} }
+    rooms[req.body.room] = { users: {} } // case where the room is normal and has no encryption field. 
   }
   // redirect person to the room they just created
   res.redirect(req.body.room)
@@ -62,11 +55,30 @@ app.post('/room', (req, res) => {
 // dont udnerstasn this part as much
 app.get('/:room', (req, res) => {
   if (rooms[req.params.room] == null) {
-    return res.redirect('/')
+    return res.redirect('/') // redirect to starting page if someone doesn't enter anything in room box.
   }
   res.render('room', { roomName: req.params.room })
+  if(rooms[req.params.room].encryptionKeyRoom){
+    let userExistingRoomKey = am.KeyGen() // generate a privateKey for a specific user.
+    writeFile(`C:/Users/${username}/Downloads/privateKey.txt`, userExistingRoomKey, 0) // write a file to user so they can get a privateKey.
+  } 
 })
 
+/*
+* This function will end up writing a file to your downloads file. This function is activated when someone
+* joins or initially creates a room that is encrypted because they will need a file to represent their 
+* privateKey as through asymmetric encryption.
+*/
+function writeFile(fileName, encryptionKey, count){
+  fs.writeFile(fileName, encryptionKey, {flag: "wx"}, function(err) {
+    if(err){
+      fileName = `privateKey(${count++})`
+      writeFile(`C:/Users/${username}/Downloads/${fileName}.txt`, encryptionKey, count++) //recursion to keep checking next availiable file name in someones directory.
+    } else{
+      console.log('The file has been saved to the Downloads directory.')
+    }
+  })
+}
 // listening on port 3000
 server.listen(3000)
 
@@ -89,7 +101,7 @@ io.on('connection', socket => {
   socket.on('disconnect', () => {
 
     getUserRooms(socket).forEach(room => {
-      socket.to(room).broadcast.emit('user-disconnected', rooms[room].users[socket.id])
+      socket.to(room).broadcast.emit('user-disconnected', rooms[room].users[socket.id].name)
       delete rooms[room].users[socket.id]
     })
   })
