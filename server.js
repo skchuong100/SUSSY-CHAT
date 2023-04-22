@@ -52,16 +52,16 @@ app.post('/room', (req, res) => {
 })
 
 
-// dont udnerstasn this part as much
+// person going a room
 app.get('/:room', (req, res) => {
   if (rooms[req.params.room] == null) {
     return res.redirect('/') // redirect to starting page if someone doesn't enter anything in room box.
   }
   res.render('room', { roomName: req.params.room })
-  if(rooms[req.params.room].encryptionKeyRoom){
+  if (rooms[req.params.room].encryptionKeyRoom) {
     let userExistingRoomKey = am.KeyGen() // generate a privateKey for a specific user.
     writeFile(`C:/Users/${username}/Downloads/privateKey.txt`, userExistingRoomKey, 0) // write a file to user so they can get a privateKey.
-  } 
+  }
 })
 
 /*
@@ -69,12 +69,12 @@ app.get('/:room', (req, res) => {
 * joins or initially creates a room that is encrypted because they will need a file to represent their 
 * privateKey as through asymmetric encryption.
 */
-function writeFile(fileName, encryptionKey, count){
-  fs.writeFile(fileName, encryptionKey, {flag: "wx"}, function(err) {
-    if(err){
+function writeFile(fileName, encryptionKey, count) {
+  fs.writeFile(fileName, encryptionKey, { flag: "wx" }, function (err) {
+    if (err) {
       fileName = `privateKey(${count++})`
       writeFile(`C:/Users/${username}/Downloads/${fileName}.txt`, encryptionKey, count++) //recursion to keep checking next availiable file name in someones directory.
-    } else{
+    } else {
       console.log('The file has been saved to the Downloads directory.')
     }
   })
@@ -89,7 +89,7 @@ io.on('connection', socket => {
     // built-in function to join room we want
     socket.join(room)
     // socket.id is unique id given by socket, we assign the key: socket.id and value to be the name of the user
-    rooms[room].users[socket.id] = {name: name}
+    rooms[room].users[socket.id] = { name: name }
     socket.to(room).broadcast.emit('user-connected', name)
   })
   // waitin for a send-chat-message function call with room, message data
