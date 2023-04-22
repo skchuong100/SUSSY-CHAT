@@ -237,7 +237,7 @@ for (let x = 0; x < messages.length; x++){
     let plainText = messages[x];
     console.log('plainText');
     console.log(plainText);
-    let cipherText = cipher.encrypion(plainText, key);
+    let cipherText = cipher.encryption(plainText, key);
     console.log('cipherText');
     console.log(cipherText);
     let decrypted = cipher.decryption(plainText, cipherText, key);
