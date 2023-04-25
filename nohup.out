@@ -1,0 +1,174 @@
+node:net:1899
+    throw new ERR_SERVER_ALREADY_LISTEN();
+    ^
+
+Error [ERR_SERVER_ALREADY_LISTEN]: Listen method has been called more than once without closing.
+    at new NodeError (node:internal/errors:399:5)
+    at Server.listen (node:net:1899:11)
+    at Object.<anonymous> (/root/SUSSY-CHAT/server.js:86:8)
+    at Module._compile (node:internal/modules/cjs/loader:1267:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1321:10)
+    at Module.load (node:internal/modules/cjs/loader:1125:32)
+    at Module._load (node:internal/modules/cjs/loader:965:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:83:12)
+    at node:internal/main/run_main_module:23:47 {
+  code: 'ERR_SERVER_ALREADY_LISTEN'
+}
+
+Node.js v20.0.0
+node:net:1899
+    throw new ERR_SERVER_ALREADY_LISTEN();
+    ^
+
+Error [ERR_SERVER_ALREADY_LISTEN]: Listen method has been called more than once without closing.
+    at new NodeError (node:internal/errors:399:5)
+    at Server.listen (node:net:1899:11)
+    at Object.<anonymous> (/root/SUSSY-CHAT/server.js:86:8)
+    at Module._compile (node:internal/modules/cjs/loader:1267:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1321:10)
+    at Module.load (node:internal/modules/cjs/loader:1125:32)
+    at Module._load (node:internal/modules/cjs/loader:965:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:83:12)
+    at node:internal/main/run_main_module:23:47 {
+  code: 'ERR_SERVER_ALREADY_LISTEN'
+}
+
+Node.js v20.0.0
+node:net:1899
+    throw new ERR_SERVER_ALREADY_LISTEN();
+    ^
+
+Error [ERR_SERVER_ALREADY_LISTEN]: Listen method has been called more than once without closing.
+    at new NodeError (node:internal/errors:399:5)
+    at Server.listen (node:net:1899:11)
+    at Object.<anonymous> (/root/SUSSY-CHAT/server.js:86:8)
+    at Module._compile (node:internal/modules/cjs/loader:1267:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1321:10)
+    at Module.load (node:internal/modules/cjs/loader:1125:32)
+    at Module._load (node:internal/modules/cjs/loader:965:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:83:12)
+    at node:internal/main/run_main_module:23:47 {
+  code: 'ERR_SERVER_ALREADY_LISTEN'
+}
+
+Node.js v20.0.0
+/root/SUSSY-CHAT/server.js:12
+const socket = io('http://localhost:3000');
+               ^
+
+TypeError: io is not a function
+    at Object.<anonymous> (/root/SUSSY-CHAT/server.js:12:16)
+    at Module._compile (node:internal/modules/cjs/loader:1267:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1321:10)
+    at Module.load (node:internal/modules/cjs/loader:1125:32)
+    at Module._load (node:internal/modules/cjs/loader:965:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:83:12)
+    at node:internal/main/run_main_module:23:47
+
+Node.js v20.0.0
+/root/SUSSY-CHAT/server.js:12
+const socket = io('http://localhost:3000');
+               ^
+
+TypeError: io is not a function
+    at Object.<anonymous> (/root/SUSSY-CHAT/server.js:12:16)
+    at Module._compile (node:internal/modules/cjs/loader:1267:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1321:10)
+    at Module.load (node:internal/modules/cjs/loader:1125:32)
+    at Module._load (node:internal/modules/cjs/loader:965:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:83:12)
+    at node:internal/main/run_main_module:23:47
+
+Node.js v20.0.0
+/root/SUSSY-CHAT/server.js:13
+const socket = io('http://localhost:3000');
+               ^
+
+TypeError: io is not a function
+    at Object.<anonymous> (/root/SUSSY-CHAT/server.js:13:16)
+    at Module._compile (node:internal/modules/cjs/loader:1267:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1321:10)
+    at Module.load (node:internal/modules/cjs/loader:1125:32)
+    at Module._load (node:internal/modules/cjs/loader:965:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:83:12)
+    at node:internal/main/run_main_module:23:47
+
+Node.js v20.0.0
+/root/SUSSY-CHAT/server.js:13
+const socket = io('http://localhost:3000');
+               ^
+
+TypeError: io is not a function
+    at Object.<anonymous> (/root/SUSSY-CHAT/server.js:13:16)
+    at Module._compile (node:internal/modules/cjs/loader:1267:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1321:10)
+    at Module.load (node:internal/modules/cjs/loader:1125:32)
+    at Module._load (node:internal/modules/cjs/loader:965:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:83:12)
+    at node:internal/main/run_main_module:23:47
+
+Node.js v20.0.0
+/root/SUSSY-CHAT/server.js:13
+const socket = io('http://localhost:3000');
+               ^
+
+TypeError: io is not a function
+    at Object.<anonymous> (/root/SUSSY-CHAT/server.js:13:16)
+    at Module._compile (node:internal/modules/cjs/loader:1267:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1321:10)
+    at Module.load (node:internal/modules/cjs/loader:1125:32)
+    at Module._load (node:internal/modules/cjs/loader:965:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:83:12)
+    at node:internal/main/run_main_module:23:47
+
+Node.js v20.0.0
+/root/SUSSY-CHAT/server.js:13
+const socket = io('http://localhost:3000');
+               ^
+
+TypeError: io is not a function
+    at Object.<anonymous> (/root/SUSSY-CHAT/server.js:13:16)
+    at Module._compile (node:internal/modules/cjs/loader:1267:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1321:10)
+    at Module.load (node:internal/modules/cjs/loader:1125:32)
+    at Module._load (node:internal/modules/cjs/loader:965:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:83:12)
+    at node:internal/main/run_main_module:23:47
+
+Node.js v20.0.0
+TypeError: Cannot read properties of undefined (reading 'originalname')
+    at /root/SUSSY-CHAT/server.js:148:43
+    at Layer.handle [as handle_request] (/root/SUSSY-CHAT/node_modules/express/lib/router/layer.js:95:5)
+    at next (/root/SUSSY-CHAT/node_modules/express/lib/router/route.js:144:13)
+    at done (/root/SUSSY-CHAT/node_modules/multer/lib/make-middleware.js:45:7)
+    at indicateDone (/root/SUSSY-CHAT/node_modules/multer/lib/make-middleware.js:49:68)
+    at Multipart.<anonymous> (/root/SUSSY-CHAT/node_modules/multer/lib/make-middleware.js:166:7)
+    at Multipart.emit (node:events:511:28)
+    at emitCloseNT (node:internal/streams/destroy:132:10)
+    at process.processTicksAndRejections (node:internal/process/task_queues:81:21)
+/root/SUSSY-CHAT/amalgamation.js:128
+        let keyArray = Array.from(key);
+                             ^
+
+TypeError: undefined is not iterable (cannot read property Symbol(Symbol.iterator))
+    at Function.from (<anonymous>)
+    at amalgamation.encryption (/root/SUSSY-CHAT/amalgamation.js:128:30)
+    at Socket.<anonymous> (/root/SUSSY-CHAT/server.js:116:33)
+    at Socket.emit (node:events:511:28)
+    at /root/SUSSY-CHAT/node_modules/socket.io/lib/socket.js:531:14
+    at process.processTicksAndRejections (node:internal/process/task_queues:77:11)
+
+Node.js v20.0.0
+/root/SUSSY-CHAT/amalgamation.js:128
+        let keyArray = Array.from(key);
+                             ^
+
+TypeError: undefined is not iterable (cannot read property Symbol(Symbol.iterator))
+    at Function.from (<anonymous>)
+    at amalgamation.encryption (/root/SUSSY-CHAT/amalgamation.js:128:30)
+    at Socket.<anonymous> (/root/SUSSY-CHAT/server.js:124:33)
+    at Socket.emit (node:events:511:28)
+    at /root/SUSSY-CHAT/node_modules/socket.io/lib/socket.js:531:14
+    at process.processTicksAndRejections (node:internal/process/task_queues:77:11)
+
+Node.js v20.0.0
