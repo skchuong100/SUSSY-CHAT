@@ -23,7 +23,7 @@ if (messageForm != null) {
     // get the message
     const message = messageInput.value
     // appending the message to OUR side
-    appendMessage(`You: ${message}`)
+    appendMessage(`you: ${message}`)
     // sending info to the server side with the functin wanted
     socket.emit('send-chat-message', roomName, message)
     // reset the message textbox

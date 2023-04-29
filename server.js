@@ -51,13 +51,13 @@ app.post('/room', (req, res) => {
 })
 
 
-// dont udnerstasn this part as much
+// person going a room
 app.get('/:room', (req, res) => {
   if (rooms[req.params.room] == null) {
     return res.redirect('/') // redirect to starting page if someone doesn't enter anything in room box.
   }
   res.render('room', { roomName: req.params.room })
-  if(rooms[req.params.room].encryptionKeyRoom){
+  if (rooms[req.params.room].encryptionKeyRoom) {
     let userExistingRoomKey = am.KeyGen() // generate a privateKey for a specific user.
     //rooms[req.params.room].users[req.params.userId].encryptionKeyUser = userExistingRoomKey //base case when user doesnt have encryption key.
     //writeFile(`C:/Users/${username}/Downloads/privateKey.ppk`, userExistingRoomKey, 0) // write a file to user so they can get a privateKey.
@@ -65,7 +65,9 @@ app.get('/:room', (req, res) => {
     console.log(rooms[req.params.room])
     //io.emit('download-message', rooms[req.body.room].users[req.body.userId])
   } 
-})
+
+    //writeFile(`C:/Users/${username}/Downloads/privateKey.ppk`, userExistingRoomKey, 0) // write a file to user so they can get a privateKey.
+  })
 
 /*
 * This function will end up writing a file to your downloads file. This function is activated when someone
@@ -96,9 +98,12 @@ app.get('/download/:filename', function(req, res) {
 function writeFile(fileName, encryptionKey, count){
   fs.writeFile(fileName, encryptionKey, {flag: "wx"}, function(err) {
     if(err){
+  fs.writeFile(fileName, encryptionKey, { flag: "wx" }, function (err) {
+    if (err) {
       fileName = `privateKey(${count++})`
+
       writeFile(`C:/Users/${username}/Downloads/${fileName}.ppk`, encryptionKey, count++) //recursion to keep checking next availiable file name in someones directory.
-    } else{
+    } else {
       console.log('The file has been saved to the Downloads directory.')
     }
   })
@@ -114,25 +119,26 @@ io.on('connection', socket => {
     // built-in function to join room we want
     socket.join(room)
     // socket.id is unique id given by socket, we assign the key: socket.id and value to be the name of the user
-    rooms[room].users[socket.id] = {name: name, decryptedPeople : []}
+
+    rooms[room].users[socket.id] = { name: name, decryptedPeople: [] }
     socket.to(room).broadcast.emit('user-connected', name)
     //console.log(io.sockets.adapter.rooms[room].length)
   })
   // waitin for a send-chat-message function call with room, message data
   socket.on('send-chat-message', (room, message) => {
     // emit to the room we are currently with the function chat-message with the following data
-    if(rooms[room].encryptionKeyRoom){
+    if (rooms[room].encryptionKeyRoom) {
       const decryptedUsers = rooms[room].users[socket.id].decryptedPeople
       let encryptedMessage = am.encryption(message, rooms[room].users[socket.id].encryptionKeyUser)
       let userSockets = Object.keys(rooms[room].users)
       const nonDecryptedSockets = userSockets.filter(sock => !decryptedUsers.includes(sock));
       decryptedUsers.forEach(sock => {
-        socket.to(sock).broadcast.emit('chat-message', {message: am.decryption(message, encryptedMessage, rooms[room].users[socket.id].encryptionKeyUser), name : rooms[room].users[socket.id].name})
+        socket.to(sock).broadcast.emit('chat-message', { message: am.decryption(message, encryptedMessage, rooms[room].users[socket.id].encryptionKeyUser), name: rooms[room].users[socket.id].name })
       });
       nonDecryptedSockets.forEach(sock => {
-        socket.to(sock).broadcast.emit('chat-message', {message: encryptedMessage, name: rooms[room].users[socket.id].name})
+        socket.to(sock).broadcast.emit('chat-message', { message: encryptedMessage, name: rooms[room].users[socket.id].name })
       });
-    } else{
+    } else {
       socket.to(room).broadcast.emit('chat-message', { message: message, name: rooms[room].users[socket.id].name })
     }
   })
@@ -169,12 +175,12 @@ app.post('/upload', upload.single('file'), (req, res) => {
     }
 
     const fileContents = data.toString()
-    if(rooms[req.body.roomName].users[req.body.userId].encryptionKeyUser){
+    if (rooms[req.body.roomName].users[req.body.userId].encryptionKeyUser) {
       const roomUsers = Object.values(rooms[req.body.roomName].users)
       roomUsers.forEach(user => {
         // Check if the user's name matches a specific value
         if (user.encryptionKeyUser === fileContents) {
-          if(fileContents === rooms[req.body.roomName].users[req.body.userId].encryptionKeyUser){
+          if (fileContents === rooms[req.body.roomName].users[req.body.userId].encryptionKeyUser) {
             return; //exit when user tries to add themselves to their own encryptionKeyUser field.
           }
           const userId = req.body.userId
@@ -183,7 +189,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
           user.decryptedPeople.push(userKey)
         }
       });
-    } else{
+    } else {
       rooms[req.body.roomName].users[req.body.userId].encryptionKeyUser = fileContents //base case when user doesnt have encryption key.
       //console.log(rooms[req.body.roomName].users)
       console.log(rooms[req.body.roomName])

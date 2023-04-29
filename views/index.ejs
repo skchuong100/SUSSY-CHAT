@@ -8,24 +8,28 @@
   <title>Sussy Chat</title>
   <script defer src="http://localhost:3000/socket.io/socket.io.js"></script>
   <script defer src="script.js"></script>
+  <link href="/css/style.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
-  <h1>Active Rooms</h1>
-  <div id="room-container">
-    <% Object.keys(rooms).forEach(room=> { %>
-      <div>
-        <%= room %>
-      </div>
-      <a href="/<%= room %>">Join</a>
-      <% }) %>
+  <div id="rp">
+
+    <h1 id='AR' style="text-align: center;">Active Rooms</h1>
+    <div id="room-container">
+      <% Object.keys(rooms).forEach(room=> { %>
+        <div>
+          <%= room %>
+        </div>
+        <a href="/<%= room %>">Join</a>
+        <% }) %>
+    </div>
+    <form action="/room" method="POST">
+      <input name="room" type="text" required maxlength="128">
+      <label for="encryptedRequired">Encryption?</label>
+      <input type="checkbox" id="encryptedRequired" name="roomEncryptionRequired">
+      <button type="submit">New Room</button>
+    </form>
   </div>
-  <form action="/room" method="POST">
-    <input name="room" type="text" required maxlength="128">
-    <label for="encryptedRequired">Encryption?</label>
-    <input type="checkbox" id="encryptedRequired" name="roomEncryptionRequired">
-    <button type="submit">New Room</button>
-  </form>
 </body>
 
 </html>
