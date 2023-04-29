@@ -161,12 +161,17 @@ io.on('connection', socket => {
   socket.on('send-chat-message', (room, message) => {
     // emit to the room we are currently with the function chat-message with the following data
     if (rooms[room].encryptionKeyRoom) {
+      if(!rooms[room].users[socket.id].encryptionKeyUser){
+        socket.emit('chat-message', {message: 'WARNING-cannot send messages yet as you have uploaded your ppk', name: 'Room Disclaimer'})
+        console.log(socket.id)
+        return;
+      }
       const decryptedUsers = rooms[room].users[socket.id].decryptedPeople
       let encryptedMessage = am.encryption(message, rooms[room].users[socket.id].encryptionKeyUser)
       let userSockets = Object.keys(rooms[room].users)
       const nonDecryptedSockets = userSockets.filter(sock => !decryptedUsers.includes(sock));
       decryptedUsers.forEach(sock => {
-        socket.to(sock).broadcast.emit('chat-message', { message: am.decryption(message, encryptedMessage, rooms[room].users[socket.id].encryptionKeyUser), name: rooms[room].users[socket.id].name })
+        socket.to(sock).emit('chat-message', { message: am.decryption(message, encryptedMessage, rooms[room].users[socket.id].encryptionKeyUser), name: rooms[room].users[socket.id].name })
       });
       nonDecryptedSockets.forEach(sock => {
         socket.to(sock).broadcast.emit('chat-message', { message: encryptedMessage, name: rooms[room].users[socket.id].name })
