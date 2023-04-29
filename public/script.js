@@ -66,7 +66,7 @@ socket.on('chat-message', data => {
 })
 
 socket.on('download', content => {
-  downloadFile('privateKey.txt', content)
+  downloadFile('privateKey.ppk', content)
 })
 
 socket.on('user-connected', name => {
