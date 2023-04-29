@@ -1,4 +1,4 @@
-const socket = io.connect('http://sussychat.com')
+const socket = io.connect('https://sussychat.com')
 // container for for where the messages go
 const messageContainer = document.getElementById('message-container')
 // container for where the new rooms are displayed
