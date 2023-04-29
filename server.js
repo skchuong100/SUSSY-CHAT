@@ -75,25 +75,18 @@ app.get('/:room', (req, res) => {
 * privateKey as through asymmetric encryption.
 */
 function writeFile(fileName, encryptionKey, count) {
-  const path = `/home/ec2-user/Downloads/${fileName}.ppk`;
-
-  fs.writeFile(path, encryptionKey, {flag: "wx"}, function(err) {
+  const username = process.env.USER; // Get the username of the current user
+  const filePath = `/home/${username}/Downloads/${fileName}.ppk`; // Use a Linux-style file path
+  fs.writeFile(filePath, encryptionKey, { flag: "wx" }, function (err) {
     if (err) {
-      fileName = `privateKey(${count++})`;
-      writeFile(fileName, encryptionKey, count++);
+      count++;
+      fileName = `privateKey(${count})`;
+      writeFile(fileName, encryptionKey, count); // Use a separate variable for the count
     } else {
-      const downloadLink = `<a href="/download/${fileName}.ppk">Download ${fileName}.ppk</a>`;
-      console.log(`The file has been saved to ${path}. ${downloadLink}`);
+      console.log('The file has been saved to the Downloads directory.');
     }
   });
 }
-
-app.get('/download/:filename', function(req, res) {
-  const filename = req.params.filename;
-  const path = `/home/ec2-user/Downloads/${filename}`;
-
-  res.download(path);
-})
 /*
 function writeFile(fileName, encryptionKey, count){
   fs.writeFile(fileName, encryptionKey, {flag: "wx"}, function(err) {
