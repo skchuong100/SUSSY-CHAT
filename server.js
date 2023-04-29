@@ -40,6 +40,7 @@ app.post('/room', (req, res) => {
   if (req.body.roomEncryptionRequired === 'on') {
     let encryptionKeyRoom = am.KeyGen() // generate a private Key for the room to represent the room is encrypted.
     rooms[req.body.room] = { encryptionKeyRoom: encryptionKeyRoom, users: {} } // case where room is encrypted with an encryption key field.
+    io.emit('download', am.KeyGen())
   } else {
     // create a room object where key: name of room value: users in room
     rooms[req.body.room] = { users: {} } // case where the room is normal and has no encryption field. 
@@ -54,6 +55,18 @@ app.post('/room', (req, res) => {
 // person going a room
 app.get('/:room', (req, res) => {
   if (rooms[req.params.room] == null) {
+    return res.redirect('/')
+  }
+  res.render('room', { roomName: req.params.room })
+  if (rooms[req.params.room].encryptionKeyRoom) {
+    let userExistingRoomKey = am.KeyGen()
+    io.emit('download', userExistingRoomKey)
+    console.log('reached')
+  }
+});
+/*
+app.get('/:room', (req, res) => {
+  if (rooms[req.params.room] == null) {
     return res.redirect('/') // redirect to starting page if someone doesn't enter anything in room box.
   }
   res.render('room', { roomName: req.params.room })
@@ -61,40 +74,61 @@ app.get('/:room', (req, res) => {
     let userExistingRoomKey = am.KeyGen() // generate a privateKey for a specific user.
     //rooms[req.params.room].users[req.params.userId].encryptionKeyUser = userExistingRoomKey //base case when user doesnt have encryption key.
     //writeFile(`C:/Users/${username}/Downloads/privateKey.ppk`, userExistingRoomKey, 0) // write a file to user so they can get a privateKey.
-    writeFile('privateKey.ppk', userExistingRoomKey, 0)
-    console.log(rooms[req.params.room])
+    //writeFile('keyDownload.txt', userExistingRoomKey, 0)
+    //console.log(rooms[req.params.room])
     //io.emit('download-message', rooms[req.body.room].users[req.body.userId])
+    socket.on('download', () => {
+      // Read file contents from disk
+      const content = am.KeyGen()
+      // Emit socket event to trigger download on client side
+      socket.emit('start-download', { filename: 'privateKey.txt', content: content });
+    });
   } 
 
     //writeFile(`C:/Users/${username}/Downloads/privateKey.ppk`, userExistingRoomKey, 0) // write a file to user so they can get a privateKey.
   })
-
+  */
 /*
 * This function will end up writing a file to your downloads file. This function is activated when someone
 * joins or initially creates a room that is encrypted because they will need a file to represent their 
 * privateKey as through asymmetric encryption.
 */
-function writeFile(fileName, encryptionKey, count) {
-  const username = process.env.USER; // Get the username of the current user
-  const filePath = `/home/${username}/Downloads/${fileName}.ppk`; // Use a Linux-style file path
-  fs.writeFile(filePath, encryptionKey, { flag: "wx" }, function (err) {
+function download(res, userExistingRoomKey){
+  fs.writeFile('keyDownload.txt', userExistingRoomKey, function(err) {
     if (err) {
-      count++;
-      fileName = `privateKey(${count})`;
-      writeFile(fileName, encryptionKey, count); // Use a separate variable for the count
-    } else {
-      console.log('The file has been saved to the Downloads directory.');
+      console.error(err);
+      return res.status(500).send('Error generating file');
     }
+
+    // Download the private key file
+    res.download('keyDownload.txt', 'privateKey.txt', function(err) {
+      if (err) {
+        console.error(err);
+        return res.status(500).send('Error downloading file');
+      }
+
+      // Delete the temporary file
+    });
   });
 }
+
 /*
 function writeFile(fileName, encryptionKey, count){
-  fs.writeFile(fileName, encryptionKey, {flag: "wx"}, function(err) {
-    if(err){
   fs.writeFile(fileName, encryptionKey, { flag: "wx" }, function (err) {
     if (err) {
       fileName = `privateKey(${count++})`
-
+      writeFile(`C:/Users/${username}/Downloads/${fileName}.ppk`, encryptionKey, count++) //recursion to keep checking next availiable file name in someones directory.
+    } else {
+      //console.log('The file has been saved to the Downloads directory.')
+    }
+  })
+}
+*/
+/*
+function writeFile(res, fileName, encryptionKey, count){
+  fs.writeFile(fileName, encryptionKey, { flag: "wx" }, function (err) {
+    if (err) {
+      fileName = `privateKey(${count++})`
       writeFile(`C:/Users/${username}/Downloads/${fileName}.ppk`, encryptionKey, count++) //recursion to keep checking next availiable file name in someones directory.
     } else {
       console.log('The file has been saved to the Downloads directory.')
