@@ -1,16 +1,11 @@
 // getting the express library
-const express = require('express');
+const express = require('express')
 // creating an express object
-const cors = require('cors');
-const app = express();
-const server = require('http').createServer(app);
-const io = require('socket.io')(server, {
-  cors: {
-    origin: '*',
-  }
-});
+const app = express()
+const server = require('http').Server(app)
+const io = require('socket.io')(server)
 const fs = require("fs");
-const fse = require('fs-extra');
+const fse = require('fs-extra')
 const os = require('os');
 const username = os.userInfo().username;
 const amalgamation = require('./amalgamation.js'); // import the amalgamation.js file into server.js
@@ -23,18 +18,9 @@ const path = require('path');
 
 app.set('views', './views')
 app.set('view engine', 'ejs')
-app.use(cors());
 app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(__dirname + '/public'));
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
-app.use('/api', cors({
-  origin: 'http://sussychat.com'
-}));
 
 // implement the key
 const rooms = {} // array to contain all the rooms we have at the moment
@@ -47,7 +33,7 @@ app.get('/', (req, res) => {
 
 // sending post request to create new room
 app.post('/room', (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+
   // block checks if roomName is empty, redirects to home if so
   if (rooms[req.body.room] != null) {
     return res.redirect('/')
@@ -68,7 +54,7 @@ app.post('/room', (req, res) => {
 
 
 // person going a room
-app.get('/:room', (req, res) => {
+app.get('/:room', async (req, res) => {
   if (rooms[req.params.room] == null) {
     return res.redirect('/') // redirect to starting page if someone doesn't enter anything in room box.
   }
@@ -76,10 +62,16 @@ app.get('/:room', (req, res) => {
   if (rooms[req.params.room].encryptionKeyRoom) {
     let userExistingRoomKey = am.KeyGen() // generate a privateKey for a specific user.
 
-    const fileName = `privateKey.ppk`;
-    const downloadDir = path.join(__dirname, 'public', 'downloads', username);
-    const filePath = path.join(downloadDir, fileName);
-    writeFile(filePath, userExistingRoomKey, 0); // write a file to user so they can get a privateKey.
+    const filename = `privateKey.ppk`;
+    const filepath = path.join(__dirname, '..', 'Downloads', filename);
+
+    try {
+      await writeFileAsync(filepath, userExistingRoomKey, { flag: "wx" });
+      res.download(filepath, filename);
+      console.log('The file has been saved to the Downloads directory and sent to the client for download.');
+    } catch (err) {
+      console.error(err);
+    }
   }
 })
 
@@ -88,22 +80,32 @@ app.get('/:room', (req, res) => {
 * joins or initially creates a room that is encrypted because they will need a file to represent their 
 * privateKey as through asymmetric encryption.
 */
+/*
 function writeFile(fileName, encryptionKey, count) {
-  const downloadsDir = path.join(require('os').homedir(), 'Downloads');
-  const filePath = path.join(downloadsDir, fileName);
-  
   fs.writeFile(fileName, encryptionKey, { flag: "wx" }, function (err) {
     if (err) {
       fileName = `privateKey(${count++})`
 
-      writeFile(path.join(downloadsDir, `${fileName}.ppk`), encryptionKey, count++); //recursion to keep checking next availiable file name in someones directory.
+      writeFile(`C:/Users/${username}/Downloads/${fileName}.ppk`, encryptionKey, count++) //recursion to keep checking next availiable file name in someones directory.
     } else {
       console.log('The file has been saved to the Downloads directory.')
     }
   })
 }
+*/
+
+writeFileAsync(path.join(__dirname, filename), content)
+  .then(() => {
+    // Send the file to the client
+    const file = path.join(__dirname, filename);
+    res.download(file);
+  })
+  .catch((err) => {
+    console.error(err);
+  });
+
 // listening on port 3000
-server.listen(3000);
+server.listen(3000)
 
 // waiting for a connection between client and server to be made
 io.on('connection', socket => {
