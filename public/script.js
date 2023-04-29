@@ -9,7 +9,7 @@ function downloadFile(filename, content) {
   URL.revokeObjectURL(url);
 }
 
-const socket = io('https://sussychat.com')
+const socket = io('https://www.sussychat.com')
 // container for for where the messages go
 const messageContainer = document.getElementById('message-container')
 // container for where the new rooms are displayed
