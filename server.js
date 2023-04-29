@@ -162,7 +162,7 @@ io.on('connection', socket => {
     // emit to the room we are currently with the function chat-message with the following data
     if (rooms[room].encryptionKeyRoom) {
       if(!rooms[room].users[socket.id].encryptionKeyUser){
-        socket.emit('chat-message', {message: 'WARNING-cannot send messages yet as you have uploaded your ppk', name: 'Room Disclaimer'})
+        socket.emit('chat-message', {message: 'WARNING! Cannot send messages yet as you have NOT uploaded your ppk!', name: 'Room Disclaimer'})
         console.log(socket.id)
         return;
       }
