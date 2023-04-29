@@ -40,7 +40,7 @@ app.post('/room', (req, res) => {
   if (req.body.roomEncryptionRequired === 'on') {
     let encryptionKeyRoom = am.KeyGen() // generate a private Key for the room to represent the room is encrypted.
     rooms[req.body.room] = { encryptionKeyRoom: encryptionKeyRoom, users: {} } // case where room is encrypted with an encryption key field.
-    io.emit('download', am.KeyGen())
+    //io.emit('download', am.KeyGen())
   } else {
     // create a room object where key: name of room value: users in room
     rooms[req.body.room] = { users: {} } // case where the room is normal and has no encryption field. 
@@ -60,8 +60,7 @@ app.get('/:room', (req, res) => {
   res.render('room', { roomName: req.params.room })
   if (rooms[req.params.room].encryptionKeyRoom) {
     let userExistingRoomKey = am.KeyGen()
-    io.emit('download', userExistingRoomKey)
-    console.log('reached')
+    //io.emit('download', userExistingRoomKey)
   }
 });
 /*
@@ -138,12 +137,19 @@ function writeFile(res, fileName, encryptionKey, count){
 */
 // listening on port 3000
 server.listen(3000)
+let userDownloaded = {}
 
 // waiting for a connection between client and server to be made
 io.on('connection', socket => {
   // waiting for new user request from client
   socket.on('new-user', (room, name) => {
     // built-in function to join room we want
+    if(rooms[room].encryptionKeyRoom){
+      if (!userDownloaded[socket.id]) { // Check if download event has not been emitted for this user
+        io.to(socket.id).emit('download', am.KeyGen()); // Emit the event only to this user
+        userDownloaded[socket.id] = true; // Set the flag to indicate that the download event has been emitted for this user
+      }
+    }
     socket.join(room)
     // socket.id is unique id given by socket, we assign the key: socket.id and value to be the name of the user
 
