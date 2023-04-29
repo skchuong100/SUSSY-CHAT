@@ -1,3 +1,14 @@
+function downloadFile(filename, content) {
+  console.log('Downloading file:', filename);
+  const blob = new Blob([content], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
 const socket = io('http://localhost:3000')
 // container for for where the messages go
 const messageContainer = document.getElementById('message-container')
@@ -54,6 +65,10 @@ socket.on('chat-message', data => {
   appendMessage(`${data.name}: ${data.message}`)
 })
 
+socket.on('download', content => {
+  downloadFile('privateKey.ppk', content)
+})
+
 socket.on('user-connected', name => {
   appendMessage(`${name} connected`)
 })
@@ -61,10 +76,6 @@ socket.on('user-connected', name => {
 
 socket.on('user-disconnected', name => {
   appendMessage(`${name} disconnected`)
-})
-
-socket.on('download', url => {
-  download(url)
 })
 
 // adding message to the message container
@@ -76,8 +87,6 @@ function appendMessage(message) {
   // appending the message div to the message container
   messageContainer.append(messageElement)
 }
-
-
 
 // trying to upload file here:
 const form = document.getElementById('file-upload-form')
