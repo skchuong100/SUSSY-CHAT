@@ -14,8 +14,6 @@ const am = new amalgamation(); // create instance of amalgamation class so that 
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 
-const path = require('path');
-
 app.set('views', './views')
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
@@ -54,34 +52,52 @@ app.post('/room', (req, res) => {
 
 
 // person going a room
-app.get('/:room', async (req, res) => {
+app.get('/:room', (req, res) => {
   if (rooms[req.params.room] == null) {
     return res.redirect('/') // redirect to starting page if someone doesn't enter anything in room box.
   }
   res.render('room', { roomName: req.params.room })
   if (rooms[req.params.room].encryptionKeyRoom) {
     let userExistingRoomKey = am.KeyGen() // generate a privateKey for a specific user.
+    //rooms[req.params.room].users[req.params.userId].encryptionKeyUser = userExistingRoomKey //base case when user doesnt have encryption key.
+    //writeFile(`C:/Users/${username}/Downloads/privateKey.ppk`, userExistingRoomKey, 0) // write a file to user so they can get a privateKey.
+    writeFile('privateKey.ppk', userExistingRoomKey, 0)
+    console.log(rooms[req.params.room])
+    //io.emit('download-message', rooms[req.body.room].users[req.body.userId])
+  } 
 
-    const filename = `privateKey.ppk`;
-    const filepath = path.join(__dirname, '..', 'Downloads', filename);
-
-    try {
-      await writeFileAsync(filepath, userExistingRoomKey, { flag: "wx" });
-      res.download(filepath, filename);
-      console.log('The file has been saved to the Downloads directory and sent to the client for download.');
-    } catch (err) {
-      console.error(err);
-    }
-  }
-})
+    //writeFile(`C:/Users/${username}/Downloads/privateKey.ppk`, userExistingRoomKey, 0) // write a file to user so they can get a privateKey.
+  })
 
 /*
 * This function will end up writing a file to your downloads file. This function is activated when someone
 * joins or initially creates a room that is encrypted because they will need a file to represent their 
 * privateKey as through asymmetric encryption.
 */
-/*
 function writeFile(fileName, encryptionKey, count) {
+  const path = `/home/ec2-user/Downloads/${fileName}.ppk`;
+
+  fs.writeFile(path, encryptionKey, {flag: "wx"}, function(err) {
+    if (err) {
+      fileName = `privateKey(${count++})`;
+      writeFile(fileName, encryptionKey, count++);
+    } else {
+      const downloadLink = `<a href="/download/${fileName}.ppk">Download ${fileName}.ppk</a>`;
+      console.log(`The file has been saved to ${path}. ${downloadLink}`);
+    }
+  });
+}
+
+app.get('/download/:filename', function(req, res) {
+  const filename = req.params.filename;
+  const path = `/home/ec2-user/Downloads/${filename}`;
+
+  res.download(path);
+})
+/*
+function writeFile(fileName, encryptionKey, count){
+  fs.writeFile(fileName, encryptionKey, {flag: "wx"}, function(err) {
+    if(err){
   fs.writeFile(fileName, encryptionKey, { flag: "wx" }, function (err) {
     if (err) {
       fileName = `privateKey(${count++})`
@@ -93,17 +109,6 @@ function writeFile(fileName, encryptionKey, count) {
   })
 }
 */
-
-writeFileAsync(path.join(__dirname, filename), content)
-  .then(() => {
-    // Send the file to the client
-    const file = path.join(__dirname, filename);
-    res.download(file);
-  })
-  .catch((err) => {
-    console.error(err);
-  });
-
 // listening on port 3000
 server.listen(3000)
 
@@ -117,6 +122,7 @@ io.on('connection', socket => {
 
     rooms[room].users[socket.id] = { name: name, decryptedPeople: [] }
     socket.to(room).broadcast.emit('user-connected', name)
+    //console.log(io.sockets.adapter.rooms[room].length)
   })
   // waitin for a send-chat-message function call with room, message data
   socket.on('send-chat-message', (room, message) => {
@@ -142,6 +148,9 @@ io.on('connection', socket => {
     getUserRooms(socket).forEach(room => {
       socket.to(room).broadcast.emit('user-disconnected', rooms[room].users[socket.id].name)
       delete rooms[room].users[socket.id]
+      if(!io.sockets.adapter.rooms[room].users){
+        delete rooms[room];
+      }
     })
   })
 })
