@@ -58,10 +58,12 @@ app.get('/:room', (req, res) => {
     return res.redirect('/')
   }
   res.render('room', { roomName: req.params.room })
+  /*
   if (rooms[req.params.room].encryptionKeyRoom) {
     let userExistingRoomKey = am.KeyGen()
     //io.emit('download', userExistingRoomKey)
   }
+  */
 });
 /*
 app.get('/:room', (req, res) => {
@@ -146,7 +148,7 @@ io.on('connection', socket => {
     // built-in function to join room we want
     if(rooms[room].encryptionKeyRoom){
       if (!userDownloaded[socket.id]) { // Check if download event has not been emitted for this user
-        io.to(socket.id).emit('download', am.KeyGen()); // Emit the event only to this user
+        io.to(socket.id).emit('download', am.KeyGen(), room, name); // Emit the event only to this user
         userDownloaded[socket.id] = true; // Set the flag to indicate that the download event has been emitted for this user
       }
     }
