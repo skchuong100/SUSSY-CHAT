@@ -102,7 +102,23 @@ console.log(answer);
 class amalgamation{
     constructor(){
         //Set up a variable array 
-        this.alpha = Array.from('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-./{}[]^_~`?|@<>;: ');
+        //this.alpha = Array.from('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-./{}[]^_~`?|@<>;: ');
+        let key = [];
+        //Set up a variable string
+        let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-./{}[]^_~`?|@<>;: '
+        //Generate a key up to 128 in length
+        while (key.length < 128){
+            let randChar = (Math.random() * characters.length)
+            //Add the randomly chosen character to the end of the array 
+            key.push(characters.charAt(randChar));
+            characters = characters.slice(0, randChar) + characters.slice(randChar + 1)
+            
+        }
+        this.alpha = '';
+        for (let x = 0; x < key.length; x++){
+            this.alpha += key[x];
+        
+        }
     }
     //Generate a key 
     KeyGen(){
@@ -124,6 +140,8 @@ class amalgamation{
     }
     //Encrypt the plaintext
     encryption(plainText, key){
+        console.log("var array");
+        console.log(this.alpha);
         let plainTextArray = Array.from(plainText);
         let keyArray = Array.from(key);
         //Set up an empty array 
@@ -189,6 +207,7 @@ class amalgamation{
             //Subtract again by 1
             let sub = z - 1;
             //Check if the difference is less than 0
+            
             if (sub < 0){
                 //Subtract the difference again by 1
                 let j = z - 1;
@@ -225,19 +244,20 @@ class amalgamation{
         return resultString;
     }
 } 
+
 module.exports = amalgamation
 
-//let messages = ['Hi, my name is Spencer and her name is Yuwei!', 'Nice to meet you', 'You got the goods?', 'We will meet at the Getty Museum at 9:00 AM'];
-//const cipher = new amalgamation();
-//let key = cipher.KeyGen();
-//console.log(key);
-
 /*
+let messages = ['Hi, my name is Spencer and her name is Yuwei!', 'Nice to meet you', 'You got the goods?', 'We will meet at the Getty Museum at 9:00 AM'];
+const cipher = new amalgamation();
+let key = cipher.KeyGen();
+console.log(key);
+
 for (let x = 0; x < messages.length; x++){
     let plainText = messages[x];
     console.log('plainText');
     console.log(plainText);
-    let cipherText = cipher.encryption(plainText, key);
+    let cipherText = cipher.encrypion(plainText, key);
     console.log('cipherText');
     console.log(cipherText);
     let decrypted = cipher.decryption(plainText, cipherText, key);
@@ -247,7 +267,6 @@ for (let x = 0; x < messages.length; x++){
     
 }
 */
-
 
 
     

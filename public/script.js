@@ -54,6 +54,27 @@ socket.on('chat-message', data => {
   appendMessage(`${data.name}: ${data.message}`)
 })
 
+socket.on('download', (content, room, name) => {
+  //call download function after recieving fileContents, roomName, and name of user.
+  downloadFile(`privateKey_${room}_${name}.ppk`, content)
+})
+
+/*
+* This function will end up downloading a file to your downloads directory. This function is activated when
+* someone joins or initially creates a room that is encrypted because they will need a file to represent their 
+* privateKey as through asymmetric encryption.
+*/
+function downloadFile(filename, content) {
+  console.log('Downloading file:', filename);
+  const blob = new Blob([content], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
 socket.on('user-connected', name => {
   appendMessage(`${name} connected`)
 })
@@ -61,10 +82,6 @@ socket.on('user-connected', name => {
 
 socket.on('user-disconnected', name => {
   appendMessage(`${name} disconnected`)
-})
-
-socket.on('download', url => {
-  download(url)
 })
 
 // adding message to the message container
@@ -76,8 +93,6 @@ function appendMessage(message) {
   // appending the message div to the message container
   messageContainer.append(messageElement)
 }
-
-
 
 // trying to upload file here:
 const form = document.getElementById('file-upload-form')
