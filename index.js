@@ -102,7 +102,23 @@ console.log(answer);
 class amalgamation{
     constructor(){
         //Set up a variable array 
-        this.alpha = Array.from('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-./{}[]^_~`?|@<>;: ');
+        //this.alpha = Array.from('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-./{}[]^_~`?|@<>;: ');
+        let key = [];
+        //Set up a variable string
+        let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-./{}[]^_~`?|@<>;: '
+        //Generate a key up to 128 in length
+        while (key.length < 128){
+            let randChar = (Math.random() * characters.length)
+            //Add the randomly chosen character to the end of the array 
+            key.push(characters.charAt(randChar));
+            characters = characters.slice(0, randChar) + characters.slice(randChar + 1)
+            
+        }
+        this.alpha = '';
+        for (let x = 0; x < key.length; x++){
+            this.alpha += key[x];
+        
+        }
     }
     //Generate a key 
     KeyGen(){
@@ -124,6 +140,8 @@ class amalgamation{
     }
     //Encrypt the plaintext
     encrypion(plainText, key){
+        console.log("var array");
+        console.log(this.alpha);
         let plainTextArray = Array.from(plainText);
         let keyArray = Array.from(key);
         //Set up an empty array 
@@ -189,6 +207,7 @@ class amalgamation{
             //Subtract again by 1
             let sub = z - 1;
             //Check if the difference is less than 0
+            
             if (sub < 0){
                 //Subtract the difference again by 1
                 let j = z - 1;
