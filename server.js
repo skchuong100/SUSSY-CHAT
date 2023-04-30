@@ -39,11 +39,11 @@ app.post('/room', (req, res) => {
   // checking if the checkbox is clicked
   if (req.body.roomEncryptionRequired === 'on') {
     let encryptionKeyRoom = am.KeyGen() // generate a private Key for the room to represent the room is encrypted.
-    rooms[req.body.room] = { encryptionKeyRoom: encryptionKeyRoom, users: {} } // case where room is encrypted with an encryption key field.
+    rooms[req.body.room] = { encryptionKeyRoom: encryptionKeyRoom, users: {}, count: 0 } // case where room is encrypted with an encryption key field.
     //io.emit('download', am.KeyGen())
   } else {
     // create a room object where key: name of room value: users in room
-    rooms[req.body.room] = { users: {} } // case where the room is normal and has no encryption field. 
+    rooms[req.body.room] = { users: {}, count: 0 } // case where the room is normal and has no encryption field. 
   }
   // redirect person to the room they just created
   res.redirect(req.body.room)
@@ -146,6 +146,7 @@ io.on('connection', socket => {
   // waiting for new user request from client
   socket.on('new-user', (room, name) => {
     // built-in function to join room we want
+    rooms[room].count += 1
     if(rooms[room].encryptionKeyRoom){
       if (!userDownloaded[socket.id]) { // Check if download event has not been emitted for this user
         io.to(socket.id).emit('download', am.KeyGen(), room, name); // Emit the event only to this user
@@ -187,7 +188,8 @@ io.on('connection', socket => {
     getUserRooms(socket).forEach(room => {
       socket.to(room).broadcast.emit('user-disconnected', rooms[room].users[socket.id].name)
       delete rooms[room].users[socket.id]
-      if(!io.sockets.adapter.rooms[room].users){
+      rooms[room].count -= 1
+      if (rooms[room].count === 0) {
         delete rooms[room];
       }
     })
