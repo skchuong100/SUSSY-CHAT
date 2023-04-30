@@ -55,9 +55,15 @@ socket.on('chat-message', data => {
 })
 
 socket.on('download', (content, room, name) => {
+  //call download function after recieving fileContents, roomName, and name of user.
   downloadFile(`privateKey_${room}_${name}.ppk`, content)
 })
 
+/*
+* This function will end up downloading a file to your downloads directory. This function is activated when
+* someone joins or initially creates a room that is encrypted because they will need a file to represent their 
+* privateKey as through asymmetric encryption.
+*/
 function downloadFile(filename, content) {
   console.log('Downloading file:', filename);
   const blob = new Blob([content], { type: 'text/plain' });
