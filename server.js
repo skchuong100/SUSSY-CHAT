@@ -5,7 +5,6 @@ const app = express()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const fs = require("fs");
-const fse = require('fs-extra')
 const os = require('os');
 const username = os.userInfo().username;
 const amalgamation = require('./amalgamation.js'); // import the amalgamation.js file into server.js
