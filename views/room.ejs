@@ -9,7 +9,7 @@
   <script>
     const roomName = "<%= roomName %>"
   </script>
-  <script defer src="./socket.io/socket.io.js"></script>
+  <script defer src="http://localhost:3000/socket.io/socket.io.js"></script>
   <script defer src="script.js"></script>
   <link href="/css/style.css" rel="stylesheet" type="text/css">
 </head>
@@ -18,11 +18,14 @@
   <div id="message-container">
     <!-- new messages go here -->
   </div>
+  <!-- div for sending messages -->
   <form id="send-container">
-    <input type="text" id="message-input">
+    <!-- input box for the message, with a limit on characters -->
+    <input type="text" id="message-input" maxlength="128">
+    <!-- button being listened to for the submission of the text -->
     <button type="submit" id="send-button">Send</button>
-
   </form>
+
   <form id="file-upload-form" enctype="multipart/form-data">
     <input type="file" name="file">
     <button type="submit">UPLOAD</button>
