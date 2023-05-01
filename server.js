@@ -39,11 +39,11 @@ app.post('/room', (req, res) => {
   // checking if the checkbox is clicked
   if (req.body.roomEncryptionRequired === 'on') {
     let encryptionKeyRoom = am.KeyGen() // generate a private Key for the room to represent the room is encrypted.
-    rooms[req.body.room] = { encryptionKeyRoom: encryptionKeyRoom, users: {} } // case where room is encrypted with an encryption key field.
+    rooms[req.body.room] = { encryptionKeyRoom: encryptionKeyRoom, users: {}, count: 0 } // case where room is encrypted with an encryption key field.
     //io.emit('download', am.KeyGen())
   } else {
     // create a room object where key: name of room value: users in room
-    rooms[req.body.room] = { users: {} } // case where the room is normal and has no encryption field. 
+    rooms[req.body.room] = { users: {}, count: 0 } // case where the room is normal and has no encryption field. 
   }
   // redirect person to the room they just created
   res.redirect(req.body.room)
@@ -58,10 +58,12 @@ app.get('/:room', (req, res) => {
     return res.redirect('/')
   }
   res.render('room', { roomName: req.params.room })
+  /*
   if (rooms[req.params.room].encryptionKeyRoom) {
     let userExistingRoomKey = am.KeyGen()
     //io.emit('download', userExistingRoomKey)
   }
+  */
 });
 /*
 app.get('/:room', (req, res) => {
@@ -144,9 +146,10 @@ io.on('connection', socket => {
   // waiting for new user request from client
   socket.on('new-user', (room, name) => {
     // built-in function to join room we want
+    rooms[room].count += 1
     if(rooms[room].encryptionKeyRoom){
       if (!userDownloaded[socket.id]) { // Check if download event has not been emitted for this user
-        io.to(socket.id).emit('download', am.KeyGen()); // Emit the event only to this user
+        io.to(socket.id).emit('download', am.KeyGen(), room, name); // Emit the event only to this user
         userDownloaded[socket.id] = true; // Set the flag to indicate that the download event has been emitted for this user
       }
     }
@@ -162,8 +165,7 @@ io.on('connection', socket => {
     // emit to the room we are currently with the function chat-message with the following data
     if (rooms[room].encryptionKeyRoom) {
       if(!rooms[room].users[socket.id].encryptionKeyUser){
-        socket.emit('chat-message', {message: 'WARNING! Cannot send messages yet as you have NOT uploaded your ppk!', name: 'Room Disclaimer'})
-        console.log(socket.id)
+        socket.emit('chat-message', {message: 'WARNING - cannot send messages yet as you have not uploaded your ppk', name: 'Room Disclaimer'})
         return;
       }
       const decryptedUsers = rooms[room].users[socket.id].decryptedPeople
@@ -186,7 +188,8 @@ io.on('connection', socket => {
     getUserRooms(socket).forEach(room => {
       socket.to(room).broadcast.emit('user-disconnected', rooms[room].users[socket.id].name)
       delete rooms[room].users[socket.id]
-      if(!io.sockets.adapter.rooms[room].users){
+      rooms[room].count -= 1
+      if (rooms[room].count === 0) {
         delete rooms[room];
       }
     })

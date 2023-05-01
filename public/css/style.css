@@ -1,3 +1,11 @@
+.rp {
+    text-align: center;
+}
+
+.AR {
+    margin-bottom: 150px;
+}
+
 body {
     padding: 0;
     margin: 0;
@@ -6,17 +14,18 @@ body {
 }
 
 #message-container {
-    width: 80%;
-    max-width: 1200px;
+    width: 85%;
+    max-width: 1000px;
 }
 
 #message-container div {
-    background-color: #CCC;
+    background-color: #aba4a4;
     padding: 5px;
 }
 
 #message-container div:nth-child(2n) {
-    background-color: #FFF;
+    background-color: #91c6ff;
+    text-align: left;
 }
 
 #send-container {
@@ -24,9 +33,18 @@ body {
     padding-bottom: 30px;
     bottom: 0;
     background-color: white;
-    max-width: 1200px;
-    width: 80%;
+    max-width: 1000px;
+    width: 85%;
     display: flex;
+}
+
+#file-upload-form {
+
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    z-index: 9999;
+    text-align: center;
 }
 
 #message-input {
