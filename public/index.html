@@ -1,47 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUSSY CHAT</title>
-    <link rel="stylesheet" href="reset.css">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="styles/join-page.css">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SUSSY CHAT</title>
+
+  <!-- Base styles present in the project -->
+  <link rel="stylesheet" href="reset.css" />
+  <link rel="stylesheet" href="style.css" />
+
 </head>
-
 <body>
-    <div class="app">
-        <div class="screen join-screen active">
-            <div class="form">
-                <h2>Join Sussy Chatroom</h2>
-                <div class="form-input">
-                    <label>Username</label>
-                    <input type="text" id="username">
-                </div>
-                <div class="form-input">
-                    <button id="join-user">Join</button>
-                </div>
-            </div>
-        </div>
-        <div class="screen chat-screen">
-            <div class="header">
-                <div class="logo">Chatroom</div>
-                <button id="exit-chat">Exit</button>
-            </div>
-            <div class="messages">
+  <div class="app">
+    <!-- Join screen -->
+    <div class="screen join-screen active">
+      <form class="form" id="joinForm">
+        <h2>Join Sussy Chatroom</h2>
 
-            </div>
-            <div class="typebox">
-                <input type="text" id="message-input">
-                <button id="send-message">Send</button>
-            </div>
+        <div class="form-input">
+          <label for="username">Username</label>
+          <input id="username" type="text" autocomplete="nickname" required />
         </div>
+
+        <div class="form-input">
+          <label for="roomCode">Room code / passphrase</label>
+          <input id="roomCode" type="text" autocomplete="off" required />
+          <small>Both sides use the same code. Host can make one up.</small>
+        </div>
+
+        <div class="form-input" style="display:flex;align-items:center;gap:.5rem;">
+          <input id="isHost" type="checkbox" />
+          <label for="isHost" style="margin:0;">I am creating the room (Host)</label>
+        </div>
+
+        <!-- Shown only for host after key is created so guests can copy the salt -->
+        <div class="form-input" id="saltRow" style="display:none;">
+          <label>Salt</label>
+          <code id="saltOut" style="word-break:break-all;"></code>
+          <small>Share this salt with guests once shown.</small>
+        </div>
+
+        <div class="form-input">
+          <button id="join-user" type="submit">Join</button>
+        </div>
+      </form>
     </div>
 
-    <script type="text/javascript" src="socket.io/socket.io.js"></script>
-    <script type="text/javascript" src="code.js"></script>
-</body>
+    <!-- Chat screen -->
+    <div class="screen chat-screen">
+      <div class="header">
+        <div class="logo">Chatroom</div>
+        <button id="exit-chat" type="button">Exit</button>
+      </div>
 
+      <div class="messages" id="messages"></div>
+
+      <div class="typebox">
+        <input id="message-input" type="text" autocomplete="off" placeholder="Type a message…" />
+        <button id="send-message" type="button">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Socket.IO bundle served by the server -->
+  <script src="socket.io/socket.io.js"></script>
+  <!-- App logic (will handle key derivation, encrypt/decrypt, and chat wiring) -->
+  <script src="code.js"></script>
+</body>
 </html>
